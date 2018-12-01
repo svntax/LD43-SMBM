@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/person_unit.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/villager.png" type="Texture" id=2]
+[ext_resource path="res://Sprites/warrior.png" type="Texture" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -31,11 +32,20 @@ wait_time = 5.0
 one_shot = false
 autostart = false
 
-[node name="Sprite" type="Sprite" parent="." index="1"]
+[node name="Sprite1" type="Sprite" parent="." index="1"]
 
+visible = false
 texture = ExtResource( 2 )
+_sections_unfolded = [ "Material", "Offset", "Transform" ]
 
-[node name="Hitbox" type="Area2D" parent="." index="2"]
+[node name="Sprite2" type="Sprite" parent="." index="2"]
+
+visible = false
+position = Vector2( 0, -1 )
+texture = ExtResource( 3 )
+_sections_unfolded = [ "Material", "Offset", "Transform" ]
+
+[node name="Hitbox" type="Area2D" parent="." index="3"]
 
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -49,10 +59,18 @@ audio_bus_name = "Master"
 
 shape = SubResource( 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="4"]
 
 position = Vector2( 0, 2 )
 shape = SubResource( 2 )
+disabled = true
+
+[node name="SkeletonSprite" type="Sprite" parent="." index="5"]
+
+visible = false
+modulate = Color( 0, 0, 0, 1 )
+texture = ExtResource( 3 )
+_sections_unfolded = [ "Visibility" ]
 
 [connection signal="timeout" from="WanderTimer" to="." method="_on_WanderTimer_timeout"]
 
