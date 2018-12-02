@@ -3,15 +3,19 @@ extends KinematicBody2D
 var originalPos
 var reachedNextPos
 
-var moveSpeed = 8
+var moveSpeed = 16
 var moveVel
 var nextPos
+var firstMove
+var targetVillage
 
 var wanderTimer
 
 func _ready():
     originalPos = self.global_position
     reachedNextPos = true
+    targetVillage = null
+    firstMove = true
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -51,6 +55,10 @@ func _physics_process(delta):
     if(self.global_position.distance_to(nextPos) < 2):
         moveVel = Vector2()
         reachedNextPos = true
+        if(firstMove):
+            reachedNextPos = false
+            firstMove = false
+            moveUnitTo(targetVillage.global_position + Vector2(rand_range(-24, 24), rand_range(-24, 24)))
 
 func moveUnitTo(pos):
     reachedNextPos = false

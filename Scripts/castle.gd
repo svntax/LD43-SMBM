@@ -1,5 +1,8 @@
 extends Node2D
 
+#Based on total population
+var GROWTH_RATE = 0.02
+
 var population
 var prevPopulation
 var populationLabel
@@ -11,7 +14,7 @@ func _ready():
     population = 10
     prevPopulation = population
     populationLabel = find_node("PopulationLabel")
-    populationLabel.text = str(population)
+    populationLabel.text = "Soldiers: " + str(population)
 #    for i in range(population):
 #        addVillager()
 
@@ -26,32 +29,32 @@ func _process(delta):
 #    villager.translate(Vector2(rand_range(-32, 32), rand_range(-32, 32)))
 #    villager.updateOriginalPos()
 
-func spawnSoldier(origin, target):
+func spawnSoldier(origin, target, targetVillage):
     var soldier = soldierObject.instance()
     find_node("YSort").add_child(soldier)
     soldier.global_position = origin
     soldier.updateOriginalPos()
+    soldier.targetVillage = targetVillage
     soldier.moveUnitTo(target)
+    reducePopulation(1)
 
 func sendSoldiersTo(targetVillage):
     #Send ALL soldiers
     var amount = floor(population)
-    var origin = self.global_position + Vector2(0, 16)
-    var angleStart = 30
-    var angleEnd = 150
-    var angleDelta = (angleEnd - angleStart) / amount
-    print(angleDelta)
-    var length = 16
+    if(amount <= 0): #Not enough soldiers
+        print("Not enough soldiers")
+        return false
+    var origin = self.global_position + Vector2(0, 18)
     for i in range(amount):
-        var nx = length * cos(deg2rad(angleStart + (i * angleDelta)))
-        var ny = length * sin(deg2rad(angleStart + (i * angleDelta)))
-        spawnSoldier(origin, origin + Vector2(nx, ny))
+        spawnSoldier(origin, origin + Vector2(rand_range(-12, 12), rand_range(0, 12)), targetVillage)
+    
+    return true
 
 func reducePopulation(amount):
     population -= amount
     if(population < 0):
         population = 0
-    populationLabel.text = str(population)
+    populationLabel.text = "Soldiers: " + str(population)
 
 func increasePopulation(amount):
     population += amount
@@ -61,9 +64,12 @@ func increasePopulation(amount):
 #            addVillager()
         prevPopulation = floor(population)
         
-    populationLabel.text = str(population)
+    populationLabel.text = "Soldiers: " + str(population)
 
 func _on_GrowthTimer_timeout():
-    var amount = population * 0.02
-    #print(str(population) + " vs " + str(floor(population + amount)))
+    var totalPopulation = 0
+    #TODO
+    for village in get_tree().get_nodes_in_group("Villages"):
+        totalPopulation += village.population
+    var amount = totalPopulation * GROWTH_RATE
     increasePopulation(amount)

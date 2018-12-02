@@ -7,7 +7,6 @@ var reachedNextPos
 var moveSpeed = 4
 var moveVel
 var nextPos
-var spriteName
 
 var homeVillage #Reference to original village
 
@@ -30,9 +29,8 @@ func _ready():
     homeVillage = get_parent().get_parent()
 
 func pickRandomVillagerSprite():
-    var choice = randi() % 2 + 1
-    spriteName = "Sprite" + str(choice)
-    find_node(spriteName).show()
+    var choice = randi() % 6
+    find_node("Sprite").frame = choice
 
 func updateOriginalPos():
     originalPos = self.position

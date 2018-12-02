@@ -1,23 +1,28 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://Scenes/village.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Scenes/castle.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/castle.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/village.tscn" type="PackedScene" id=2]
 
 [node name="Root" type="Node2D"]
 
-[node name="Village" parent="." index="0" instance=ExtResource( 1 )]
+[node name="Castle" parent="." index="0" instance=ExtResource( 1 )]
+
+position = Vector2( 188.919, 91.8868 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Village" parent="." index="1" instance=ExtResource( 2 )]
 
 position = Vector2( 306.689, 73.9838 )
 
-[node name="Village2" parent="." index="1" instance=ExtResource( 1 )]
+[node name="Village2" parent="." index="2" instance=ExtResource( 2 )]
 
 position = Vector2( 189.132, 166.266 )
 
-[node name="Village3" parent="." index="2" instance=ExtResource( 1 )]
+[node name="Village3" parent="." index="3" instance=ExtResource( 2 )]
 
 position = Vector2( 74.375, 58.5873 )
 
-[node name="Camera2D" type="Camera2D" parent="." index="3"]
+[node name="Camera2D" type="Camera2D" parent="." index="4"]
 
 anchor_mode = 0
 rotating = false
@@ -41,10 +46,5 @@ drag_margin_bottom = 0.2
 editor_draw_screen = true
 editor_draw_limits = false
 editor_draw_drag_margin = false
-
-[node name="Castle" parent="." index="4" instance=ExtResource( 2 )]
-
-position = Vector2( 188.919, 91.8868 )
-_sections_unfolded = [ "Transform" ]
 
 
