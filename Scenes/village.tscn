@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://Scripts/village_controls.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/village.png" type="Texture" id=2]
@@ -58,6 +58,11 @@ shadow_color = Color( 0, 0, 0, 0.6 )
 shadow_size = 0
 anti_aliasing = true
 anti_aliasing_size = 1
+
+[sub_resource type="CircleShape2D" id=3]
+
+custom_solver_bias = 0.0
+radius = 14.0
 
 [node name="Village" type="Node2D"]
 
@@ -124,5 +129,30 @@ percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin" ]
+
+[node name="GrowthTimer" type="Timer" parent="." index="3"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = true
+
+[node name="ClickArea" type="Area2D" parent="." index="4"]
+
+input_pickable = true
+gravity_vec = Vector2( 0, 1 )
+gravity = 98.0
+linear_damp = 0.1
+angular_damp = 1.0
+audio_bus_override = false
+audio_bus_name = "Master"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ClickArea" index="0"]
+
+shape = SubResource( 3 )
+
+[connection signal="timeout" from="GrowthTimer" to="." method="_on_GrowthTimer_timeout"]
+
+[connection signal="input_event" from="ClickArea" to="." method="_on_ClickArea_input_event"]
 
 
