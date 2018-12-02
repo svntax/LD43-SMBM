@@ -15,9 +15,13 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Village" parent="." index="1" instance=ExtResource( 3 )]
 
-position = Vector2( 256.435, 152.336 )
+position = Vector2( 207.339, 175.687 )
 
-[node name="Camera2D" type="Camera2D" parent="." index="2"]
+[node name="Village2" parent="." index="2" instance=ExtResource( 3 )]
+
+position = Vector2( 85.021, 72.4475 )
+
+[node name="Camera2D" type="Camera2D" parent="." index="3"]
 
 anchor_mode = 0
 rotating = false
@@ -41,5 +45,9 @@ drag_margin_bottom = 0.2
 editor_draw_screen = true
 editor_draw_limits = false
 editor_draw_drag_margin = false
+
+[node name="Village3" parent="." index="4" instance=ExtResource( 3 )]
+
+position = Vector2( 305.956, 87.416 )
 
 
