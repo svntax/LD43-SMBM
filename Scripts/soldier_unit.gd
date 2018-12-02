@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+var spawnPos
 var originalPos
 var reachedNextPos
 
@@ -7,18 +8,30 @@ var moveSpeed = 16
 var moveVel
 var nextPos
 var firstMove
+
+var movingToTargetVillage
+var movingBackToCastle
+var movingToCastleDoor
+
 var targetVillage
+var castle
 
 var wanderTimer
 
 func _ready():
     originalPos = self.global_position
+    spawnPos = Vector2()
     reachedNextPos = true
     targetVillage = null
     firstMove = true
+    movingToTargetVillage = false
+    movingBackToCastle = false
+    movingToCastleDoor = false
     
     moveVel = Vector2()
     nextPos = Vector2()
+    
+    castle = get_tree().get_root().get_node("Root").find_node("Castle")
     
 #    wanderTimer = find_node("WanderTimer")
 #    wanderTimer.wait_time = rand_range(5, 10)
@@ -27,22 +40,9 @@ func _ready():
 func updateOriginalPos():
     originalPos = self.global_position
 
-#func sendToCastle():
-#    isVillager = false
-#    isSkeleton = true
-#    find_node(spriteName).hide()
-#    find_node("SkeletonSprite").show()
-#
-#    reachedNextPos = false
-#    moveSpeed = 12
-#    var castle = get_tree().get_root().get_node("Root").find_node("Castle")
-#    var angle = rand_range(0, 360)
-#    var length = rand_range(24, 32)
-#    var nx = length * cos(deg2rad(angle))
-#    var ny = length * sin(deg2rad(angle))
-#    nextPos = castle.global_position + Vector2(nx, ny)
-#    originalPos = nextPos
-#    moveVel = (nextPos - self.global_position).normalized() * moveSpeed
+func sendToCastle():
+    movingBackToCastle = true
+    moveUnitTo(spawnPos)
 
 func _process(delta):
     # Called every frame. Delta is time since last frame.
@@ -58,8 +58,22 @@ func _physics_process(delta):
         if(firstMove):
             reachedNextPos = false
             firstMove = false
+            movingToTargetVillage = true
             moveUnitTo(targetVillage.global_position + Vector2(rand_range(-24, 24), rand_range(-24, 24)))
-
+        elif(movingToTargetVillage):
+            movingToTargetVillage = false
+            targetVillage.addSoldier(self)
+            #TODO debug
+            find_node("DebugSprite").show()
+        elif(movingBackToCastle):
+            movingBackToCastle = false
+            movingToCastleDoor = true
+            moveUnitTo(castle.global_position + Vector2(0, 18))
+        elif(movingToCastleDoor):
+            movingToCastleDoor = false
+            castle.increasePopulation(1)
+            self.queue_free()
+        
 func moveUnitTo(pos):
     reachedNextPos = false
     nextPos = pos

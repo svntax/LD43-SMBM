@@ -33,6 +33,7 @@ func spawnSoldier(origin, target, targetVillage):
     var soldier = soldierObject.instance()
     find_node("YSort").add_child(soldier)
     soldier.global_position = origin
+    soldier.spawnPos = origin
     soldier.updateOriginalPos()
     soldier.targetVillage = targetVillage
     soldier.moveUnitTo(target)
@@ -40,8 +41,8 @@ func spawnSoldier(origin, target, targetVillage):
 
 func sendSoldiersTo(targetVillage):
     #Send ALL soldiers
-    var amount = floor(population)
-    if(amount <= 0): #Not enough soldiers
+    var amount = 1
+    if(floor(population) <= 0): #Not enough soldiers
         print("Not enough soldiers")
         return false
     var origin = self.global_position + Vector2(0, 18)

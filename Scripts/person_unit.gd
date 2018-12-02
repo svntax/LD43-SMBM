@@ -9,13 +9,17 @@ var moveVel
 var nextPos
 
 var homeVillage #Reference to original village
+var castle
+
+var movingBackToCastle
 
 var wanderTimer
 
 func _ready():
-    originalPos = self.position
+    originalPos = self.global_position
     isVillager = true
     reachedNextPos = true
+    movingBackToCastle = false
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -27,13 +31,14 @@ func _ready():
     pickRandomVillagerSprite()
     
     homeVillage = get_parent().get_parent()
+    castle = get_tree().get_root().get_node("Root").find_node("Castle")
 
 func pickRandomVillagerSprite():
     var choice = randi() % 6
     find_node("Sprite").frame = choice
 
 func updateOriginalPos():
-    originalPos = self.position
+    originalPos = self.global_position
 
 #func sendToCastle():
 #    isVillager = false
@@ -60,13 +65,24 @@ func _process(delta):
 func _physics_process(delta):
     if(!reachedNextPos):
         move_and_slide(moveVel)
-    if(self.position.distance_to(nextPos) < 2):
+    if(self.global_position.distance_to(nextPos) < 2):
         moveVel = Vector2()
         reachedNextPos = true
+        if(movingBackToCastle):
+            #TODO should villager also move to spawnPos and then door?
+            movingBackToCastle = false
+            self.queue_free()
+
+func sendToCastle():
+    wanderTimer.stop()
+    moveSpeed = 16
+    movingBackToCastle = true
+    nextPos = castle.global_position + Vector2(0, 18)
+    moveUnitTo(nextPos)
 
 func moveUnitTo(nextPos):
     reachedNextPos = false
-    moveVel = (nextPos - self.position).normalized() * moveSpeed
+    moveVel = (nextPos - self.global_position).normalized() * moveSpeed
 
 #func _on_Hitbox_input_event(viewport, event, shape_idx):
 #    if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
@@ -76,7 +92,8 @@ func moveUnitTo(nextPos):
 #            get_parent().get_parent().reducePopulation(1)
 
 func _on_WanderTimer_timeout():
-    wanderTimer.wait_time = rand_range(5, 10)
-    reachedNextPos = false
-    nextPos = originalPos + Vector2(rand_range(-8, 8), rand_range(-8, 8))
-    moveVel = (nextPos - self.position).normalized() * moveSpeed
+    if(!movingBackToCastle):
+        wanderTimer.wait_time = rand_range(5, 10)
+        reachedNextPos = false
+        nextPos = originalPos + Vector2(rand_range(-8, 8), rand_range(-8, 8))
+        moveVel = (nextPos - self.global_position).normalized() * moveSpeed

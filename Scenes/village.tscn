@@ -65,7 +65,7 @@ anti_aliasing_size = 1
 custom_solver_bias = 0.0
 radius = 14.0
 
-[node name="Village" type="Node2D" index="0" groups=[
+[node name="Village" type="Node2D" groups=[
 "Villages",
 ]]
 
@@ -168,7 +168,14 @@ wait_time = 2.0
 one_shot = false
 autostart = true
 
-[node name="ClickArea" type="Area2D" parent="." index="6"]
+[node name="FearGrowthTimer" type="Timer" parent="." index="6"]
+
+process_mode = 1
+wait_time = 4.0
+one_shot = false
+autostart = false
+
+[node name="ClickArea" type="Area2D" parent="." index="7"]
 
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -183,6 +190,8 @@ audio_bus_name = "Master"
 shape = SubResource( 3 )
 
 [connection signal="timeout" from="GrowthTimer" to="." method="_on_GrowthTimer_timeout"]
+
+[connection signal="timeout" from="FearGrowthTimer" to="." method="_on_FearGrowthTimer_timeout"]
 
 [connection signal="input_event" from="ClickArea" to="." method="_on_ClickArea_input_event"]
 
