@@ -16,7 +16,7 @@ height = 6.0
 custom_solver_bias = 0.0
 extents = Vector2( 3, 2 )
 
-[node name="Villager" type="KinematicBody2D" groups=[
+[node name="Villager" type="KinematicBody2D" index="0" groups=[
 "Villagers",
 ]]
 

@@ -16,6 +16,7 @@ var currentFear
 var maxFear = 100
 var fearLabel
 var attackingSoldiers
+var localVillagers
 
 var PEACE_STATE = 0
 var WAR_STATE = 1
@@ -33,6 +34,7 @@ func _ready():
     randomize()
     population = 10
     currentFear = 40
+    localVillagers = []
     attackingSoldiers = []
     currentState = PEACE_STATE
     prevPopulation = population
@@ -57,6 +59,7 @@ func addVillager():
     get_node("YSort").add_child(villager)
     villager.translate(Vector2(rand_range(-22, 22), rand_range(-22, 22)))
     villager.updateOriginalPos()
+    localVillagers.append(villager)
 
 func reduceFear(amount):
     currentFear -= amount
@@ -77,13 +80,13 @@ func reducePopulation(amount):
     
     var amountLeft = amount
     var i = 0
-    var villagers = get_tree().get_nodes_in_group("Villagers")
-    while(amountLeft > 0 && i < villagers.size()):
-        var v = villagers[i]
+    #var villagers = get_tree().get_nodes_in_group("Villagers")
+    while(amountLeft > 0 && !localVillagers.empty()):
+        var v = localVillagers.pop_front()
         i += 1
-        if(v.homeVillage == self):
-            v.queue_free()
-            amountLeft -= 1
+        #if(v.homeVillage == self):
+        v.queue_free()
+        amountLeft -= 1
     
     if(population < 0):
         population = 0
@@ -134,11 +137,11 @@ func sendRemainingSoldiersToCastle():
     find_node("FearGrowthTimer").stop()
     currentState = PEACE_STATE
     var count = attackingSoldiers.size()
-    var i = 0
-    var localVillagers = get_tree().get_nodes_in_group("Villagers")
-    while(count > 0 && population >= 1 && i < localVillagers.size()):
-        var v = localVillagers[i]
-        i += 1
+    #var i = 0
+    #var localVillagers = get_tree().get_nodes_in_group("Villagers")
+    while(count > 0 && population >= 1 && !localVillagers.empty()):
+        var v = localVillagers.pop_front()
+        #i += 1
         if(v.homeVillage == self):
             increaseFear(FEAR_GROWTH_PER_REMAINING_SOLDIER * maxFear)
             sendVillagerToCastle(v)
