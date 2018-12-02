@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/person_unit.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/villager_spritesheet.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/villager.png" type="Texture" id=3]
 [ext_resource path="res://Sprites/warrior.png" type="Texture" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -16,7 +17,7 @@ height = 6.0
 custom_solver_bias = 0.0
 extents = Vector2( 3, 2 )
 
-[node name="Villager" type="KinematicBody2D" index="0" groups=[
+[node name="Villager" type="KinematicBody2D" groups=[
 "Villagers",
 ]]
 
@@ -72,6 +73,14 @@ shape = SubResource( 1 )
 position = Vector2( 0, 4 )
 shape = SubResource( 2 )
 disabled = true
+
+[node name="TravelingIcon" type="Sprite" parent="." index="6"]
+
+visible = false
+position = Vector2( 0, -10 )
+scale = Vector2( 0.1, 0.1 )
+texture = ExtResource( 5 )
+_sections_unfolded = [ "Transform" ]
 
 [connection signal="timeout" from="WanderTimer" to="." method="_on_WanderTimer_timeout"]
 

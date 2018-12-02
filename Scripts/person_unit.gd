@@ -12,6 +12,8 @@ var homeVillage #Reference to original village
 var castle
 
 var movingBackToCastle
+var travelingToCastle
+var travelingBackToVillage
 
 var wanderTimer
 
@@ -20,6 +22,8 @@ func _ready():
     isVillager = true
     reachedNextPos = true
     movingBackToCastle = false
+    travelingToCastle = false
+    travelingBackToVillage = false
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -69,14 +73,33 @@ func _physics_process(delta):
         moveVel = Vector2()
         reachedNextPos = true
         if(movingBackToCastle):
-            #TODO should villager also move to spawnPos and then door?
             movingBackToCastle = false
+            self.queue_free()
+        if(travelingToCastle):
+            travelingToCastle = false
+            travelingBackToVillage = true
+            travelBackToVillage()
+        elif(travelingBackToVillage):
+            travelingBackToVillage = false
             self.queue_free()
 
 func sendToCastle():
     wanderTimer.stop()
     moveSpeed = 16
     movingBackToCastle = true
+    nextPos = castle.global_position + Vector2(0, 18)
+    moveUnitTo(nextPos)
+
+func travelBackToVillage():
+    nextPos = homeVillage.global_position + Vector2(0, 8)
+    moveUnitTo(nextPos)
+
+func startTraveling():
+    wanderTimer.stop()
+    #TODO debug
+    find_node("TravelingIcon").show()
+    moveSpeed = 12
+    travelingToCastle = true
     nextPos = castle.global_position + Vector2(0, 18)
     moveUnitTo(nextPos)
 

@@ -8,6 +8,11 @@ var FEAR_GROWTH_WHILE_AT_WAR = 0.05
 var FEAR_GROWTH_PER_REMAINING_SOLDIER = 0.06
 var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
+var SOLDIERS_PER_VILLAGE_DEATH = 5
+var VILLAGERS_PER_SOLDIER_DEATH = 15
+
+var TRAVELING_VILLAGERS_PERCENT = 0.2
+
 var population
 var prevPopulation
 var populationLabel
@@ -60,6 +65,13 @@ func addVillager():
     villager.translate(Vector2(rand_range(-22, 22), rand_range(-22, 22)))
     villager.updateOriginalPos()
     localVillagers.append(villager)
+
+func addTravelingVillager():
+    var villager = villagerObject.instance()
+    get_node("YSort").add_child(villager)
+    villager.translate(Vector2(rand_range(-12, 12), rand_range(0, 8)))
+    villager.updateOriginalPos()
+    villager.startTraveling()
 
 func reduceFear(amount):
     currentFear -= amount
@@ -177,8 +189,7 @@ func _on_FearGrowthTimer_timeout():
 #                i += 1
 #                if(v.homeVillage == self):
 #                    sendVillagerToCastle(v)
-#                    count -= 1
-                
+#                    count -= 1           
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
@@ -188,3 +199,9 @@ func _on_ClickArea_input_event(viewport, event, shape_idx):
             #TODO immediate for now
 #            if(successfulAttack):
 #                attackVillage()
+
+func _on_TravelTimer_timeout():
+    var amount = floor(population * TRAVELING_VILLAGERS_PERCENT)
+    if(amount > 0):
+        for i in range(amount):
+            addTravelingVillager()
