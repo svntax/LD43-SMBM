@@ -1,7 +1,7 @@
 extends Node2D
 
 #Based on total population
-var GROWTH_RATE = 0.02
+var GROWTH_RATE = 0.015
 
 var population
 var prevPopulation

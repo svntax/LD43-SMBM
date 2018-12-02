@@ -65,7 +65,7 @@ anti_aliasing_size = 1
 custom_solver_bias = 0.0
 radius = 14.0
 
-[node name="Village" type="Node2D" groups=[
+[node name="Village" type="Node2D" index="0" groups=[
 "Villages",
 ]]
 
