@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="LudumDare43"
-run/main_scene="res://Scenes/gameplay.tscn"
+run/main_scene="res://Scenes/main_menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
@@ -25,6 +25,13 @@ window/size/height=576
 window/stretch/mode="2d"
 window/stretch/aspect="keep"
 window/stretch/shrink="1"
+
+[input]
+
+START_GAME=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
+MOVE_TO_NEXT_FRAME=[ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
+ ]
 
 [rendering]
 

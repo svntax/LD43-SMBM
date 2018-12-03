@@ -9,7 +9,7 @@ var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
 #Number of villagers at start
 var INITIAL_POPULATION = 10
-var INITIAL_FEAR = 40
+var INITIAL_FEAR = 10#40
 
 #Must be decimal numbers
 var SOLDIERS_PER_VILLAGER_DEATH = 5.0
@@ -101,6 +101,8 @@ func increaseFear(amount):
     fearLabel.text = "Fear: " + str(currentFear) + "%"
 
 func reducePopulation(amount):
+    if Globals.rebellionStarted:
+        return
     population -= amount
     if(population < 0):
         population = 0
@@ -108,8 +110,9 @@ func reducePopulation(amount):
         var count = prevPopulation - floor(population)
         while(count > 0 && !localVillagers.empty()):
             var v = localVillagers.pop_front()
-            v.queue_free()
-            count -= 1
+            if v:
+                v.queue_free()
+                count -= 1
     
 #    var amountLeft = amount
 #    var i = 0
@@ -148,6 +151,8 @@ func rebel():
         villager.attackCastle()
 
 func increasePopulation(amount):
+    if Globals.rebellionStarted:
+        return
     population += amount
     #print(str(prevPopulation) + " vs " + str(floor(population)))
     if(floor(population) > prevPopulation):
@@ -188,12 +193,15 @@ func runCombatStep():
     print("Remaining soldiers (int, float): " + str(attackingSoldiers.size()) + ", " + str(soldiersAmount))
 
 func changeToWar():
+    if Globals.rebellionStarted:
+        return
     SoundHandler.startClashSounds()
     currentState = WAR_STATE
     find_node("CombatTimer").start()
     find_node("FearGrowthTimer").start()
     for v in localVillagers:
-        v.startMovingFrantically()    
+        if v:
+            v.startMovingFrantically()    
     #DEBUG
     find_node("StateLabel").text = "WAR"
 
@@ -203,7 +211,8 @@ func changeToPeace():
     find_node("FearGrowthTimer").stop()
     find_node("CombatTimer").stop()
     for v in localVillagers:
-        v.stopMovingFrantically()
+        if v:
+            v.stopMovingFrantically()
     #DEBUG
     find_node("StateLabel").text = "PEACE"
     SoundHandler.stopClashSounds()
@@ -230,8 +239,9 @@ func killSoldiers(amount):
         var count = attackingSoldiers.size() - floor(soldiersAmount)
         while(count > 0 && !attackingSoldiers.empty()):
             var s = attackingSoldiers.pop_front()
-            s.queue_free()
-            count -= 1
+            if s:
+                s.queue_free()
+                count -= 1
 
 func sendRemainingSoldiersToCastle():
     changeToPeace()
@@ -284,6 +294,8 @@ func _on_FearGrowthTimer_timeout():
 #            sendRemainingSoldiersToCastle()
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
+    if Globals.rebellionStarted:
+        return
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
         var successfulAttack = castle.sendSoldiersTo(self)
 

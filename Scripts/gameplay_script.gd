@@ -7,8 +7,10 @@ func _ready():
     invasionProgressBar = find_node("InvasionBar")
 
 func _process(delta):
-    #TODO go back to main menu if game over or game win
-    pass
+    if Globals.rebellionEnded:
+        if Input.is_action_just_pressed("MOVE_TO_NEXT_FRAME"):
+            SoundHandler.mainTheme.stop()
+            get_tree().change_scene("res://Scenes/intro_scene.tscn")
 
 func startRebellion():
     if(!Globals.rebellionStarted):
@@ -41,3 +43,5 @@ func _on_AnimationPlayer_animation_finished(anim_name):
     if(anim_name == "fadeout_anim"):
         print("Change to end cutscene")
         print("Soldiers at end: " + str(Globals.soldiersAmountAtEnd))
+    elif(anim_name == "rebellion_anim"):
+        Globals.rebellionEnded = true
