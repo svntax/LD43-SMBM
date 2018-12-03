@@ -8,6 +8,7 @@ var clashSound03
 var clashSound04
 var clashSound05
 var clashSounds
+var nooSound
 
 var clashSoundsPlaying = false
 
@@ -20,6 +21,7 @@ func _ready():
     clashSound04 = find_node("ClashSound04")
     clashSound05 = find_node("ClashSound05")
     clashSounds = [clashSound01, clashSound02, clashSound03, clashSound04, clashSound05]
+    nooSound = find_node("NooSound")
 
 func startClashSounds():
     if(Globals.invasionArrived):

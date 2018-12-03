@@ -9,7 +9,7 @@ var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
 #Number of villagers at start
 var INITIAL_POPULATION = 10
-var INITIAL_FEAR = 10#40
+var INITIAL_FEAR = 40
 
 #Must be decimal numbers
 var SOLDIERS_PER_VILLAGER_DEATH = 5.0
@@ -58,14 +58,19 @@ func _ready():
     populationLabel.text = "Population: " + str(population)
     fearLabel.text = "Fear: " + str(round(currentFear)) + "%"
     find_node("WhiteFlag").updatePos(currentFear, maxFear)
-    for i in range(population):
-        addVillager()
+    if(get_parent().name == "Root"):
+        for i in range(population):
+            addVillager()
     
     castle = get_parent().find_node("Castle")
+    
+    if(get_parent().name == "InvasionScene"):
+        find_node("GrowthTimer").stop()
+        find_node("FearGrowthTimer").stop()
+        find_node("TravelTimer").stop()
+        lifebar.hide()
 
 func _process(delta):
-    # Called every frame. Delta is time since last frame.
-    # Update game logic here.
     pass
 
 func addVillager():
@@ -294,7 +299,7 @@ func _on_FearGrowthTimer_timeout():
 #            sendRemainingSoldiersToCastle()
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
-    if Globals.rebellionStarted:
+    if Globals.rebellionStarted || get_parent().name == "InvasionScene":
         return
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
         var successfulAttack = castle.sendSoldiersTo(self)

@@ -77,6 +77,15 @@ wait_time = 0.2
 one_shot = false
 autostart = false
 
+[node name="DefendWanderTimer" type="Timer" parent="." index="5"]
+
+process_mode = 1
+wait_time = 0.4
+one_shot = false
+autostart = false
+
 [connection signal="timeout" from="FranticWanderTimer" to="." method="_on_FranticWanderTimer_timeout"]
+
+[connection signal="timeout" from="DefendWanderTimer" to="." method="_on_DefendWanderTimer_timeout"]
 
 

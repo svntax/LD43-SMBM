@@ -59,8 +59,6 @@ func updateOriginalPos():
     originalPos = self.global_position
 
 func _process(delta):
-    # Called every frame. Delta is time since last frame.
-    # Update game logic here.
     pass
 
 func _physics_process(delta):

@@ -14,6 +14,7 @@ script = ExtResource( 1 )
 position = Vector2( 0, -6 )
 texture = ExtResource( 2 )
 script = ExtResource( 3 )
+_sections_unfolded = [ "Region" ]
 
 [node name="PopulationLabel" type="Label" parent="." index="1"]
 

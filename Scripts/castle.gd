@@ -4,10 +4,10 @@ extends Node2D
 var GROWTH_RATE = 0.015
 
 #Number of soldiers at the start
-var INITIAL_POPULATION = 25.0
+var INITIAL_POPULATION = 50.0
 
 #The number of soldiers needed minimum to win
-var TARGET_SOLDIER_AMOUNT = 100
+var TARGET_SOLDIER_AMOUNT = Globals.INVADERS_AMOUNT
 
 var population
 var prevPopulation
@@ -22,12 +22,12 @@ func _ready():
     populationLabel = find_node("PopulationLabel")
     populationLabel.text = "Soldiers: " + str(population)
     find_node("WhiteFlag").updatePos(population, TARGET_SOLDIER_AMOUNT)
-#    for i in range(population):
-#        addVillager()
+    
+    if(get_parent().name == "InvasionScene"):
+        find_node("GrowthTimer").stop()
+        find_node("WhiteFlag").updatePos(Globals.soldiersAmountAtEnd, TARGET_SOLDIER_AMOUNT)
 
 func _process(delta):
-    # Called every frame. Delta is time since last frame.
-    # Update game logic here.
     pass
 
 #func addVillager():
@@ -39,7 +39,6 @@ func _process(delta):
 func spawnSoldier(origin, target, targetVillage):
     SoundHandler.clickSound.play()
     var soldier = soldierObject.instance()
-    #find_node("YSort").add_child(soldier)
     add_child(soldier)
     soldier.global_position = origin
     soldier.spawnPos = origin
@@ -79,7 +78,6 @@ func increasePopulation(amount):
 
 func _on_GrowthTimer_timeout():
     var totalPopulation = 0
-    #TODO
     for village in get_tree().get_nodes_in_group("Villages"):
         totalPopulation += village.population
     var amount = totalPopulation * GROWTH_RATE

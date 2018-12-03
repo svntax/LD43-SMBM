@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Scripts/sound_controls.gd" type="Script" id=1]
 [ext_resource path="res://Audio/sac2.ogg" type="AudioStream" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Audio/clash03.wav" type="AudioStream" id=6]
 [ext_resource path="res://Audio/clash04.wav" type="AudioStream" id=7]
 [ext_resource path="res://Audio/clash05.wav" type="AudioStream" id=8]
+[ext_resource path="res://Audio/noo.wav" type="AudioStream" id=9]
 
 [node name="Node" type="Node"]
 
@@ -82,6 +83,15 @@ process_mode = 1
 wait_time = 0.3
 one_shot = false
 autostart = false
+
+[node name="NooSound" type="AudioStreamPlayer" parent="." index="8"]
+
+stream = ExtResource( 9 )
+volume_db = -8.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
 
 [connection signal="timeout" from="ClashSoundsTimer" to="." method="_on_ClashSoundsTimer_timeout"]
 

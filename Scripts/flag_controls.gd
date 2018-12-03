@@ -13,11 +13,6 @@ func _ready():
     #If flag needs to lower, white flag, otherwise it's a black flag
     isWhiteFlag = targetYOffset > -10
 
-#func _process(delta):
-#    # Called every frame. Delta is time since last frame.
-#    # Update game logic here.
-#    pass
-
 func updatePos(currentVal, maxVal):
     if(isWhiteFlag):
         if(currentVal < 50):

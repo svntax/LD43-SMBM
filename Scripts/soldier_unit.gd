@@ -16,6 +16,7 @@ var movingToTargetVillage
 var movingBackToCastle
 var movingToCastleDoor
 var runningAway
+var defendingCastle
 
 var targetVillage
 var castle
@@ -33,16 +34,16 @@ func _ready():
     movingBackToCastle = false
     movingToCastleDoor = false
     runningAway = false
+    defendingCastle = false
     
     moveVel = Vector2()
     nextPos = Vector2()
     franticPosOrigin = Vector2()
     
-    castle = get_tree().get_root().get_node("Root").find_node("Castle")
-    
-#    wanderTimer = find_node("WanderTimer")
-#    wanderTimer.wait_time = rand_range(5, 10)
-#    wanderTimer.start()
+    if(get_parent().name == "InvasionScene"):
+        castle = get_parent().find_node("Castle")
+    else:
+        castle = get_tree().get_root().get_node("Root").find_node("Castle")
 
 func updateOriginalPos():
     originalPos = self.global_position
@@ -60,9 +61,14 @@ func sendToCastleFast():
     find_node("FranticWanderTimer").stop()
     moveUnitTo(castle.global_position + Vector2(0, 18))
 
+func defendCastle():
+    defendingCastle = true
+    moveSpeed = FRANTIC_SPEED
+    find_node("FranticWanderTimer").stop()
+    find_node("DefendWanderTimer").start()
+    moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))
+
 func _process(delta):
-    # Called every frame. Delta is time since last frame.
-    # Update game logic here.
     pass
 
 func _physics_process(delta):
@@ -71,6 +77,10 @@ func _physics_process(delta):
     if(self.global_position.distance_to(nextPos) < 2):
         moveVel = Vector2()
         reachedNextPos = true
+        if(defendingCastle):
+            reachedNextPos = false
+            moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))
+            return
         if(firstMove):
             reachedNextPos = false
             firstMove = false
@@ -105,3 +115,6 @@ func moveUnitTo(pos):
 func _on_FranticWanderTimer_timeout():
     if(!movingBackToCastle):
         moveUnitTo(franticPosOrigin + Vector2(rand_range(-8, 8), rand_range(-8, 8)))
+
+func _on_DefendWanderTimer_timeout():
+    moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))
