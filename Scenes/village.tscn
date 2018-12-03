@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/village_controls.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/village.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/flag.png" type="Texture" id=3]
+[ext_resource path="res://Scripts/auto_y_sort.gd" type="Script" id=3]
+[ext_resource path="res://Sprites/flag.png" type="Texture" id=4]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -65,28 +66,36 @@ anti_aliasing_size = 1
 custom_solver_bias = 0.0
 radius = 14.0
 
-[node name="Village" type="Node2D" groups=[
+[node name="Village" type="Node2D" index="0" groups=[
 "Villages",
 ]]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility", "Z Index" ]
 
-[node name="YSort" type="YSort" parent="." index="0"]
+[node name="BuildingSprite" type="Sprite" parent="." index="0"]
+
+z_as_relative = false
+texture = ExtResource( 2 )
+script = ExtResource( 3 )
+_sections_unfolded = [ "Material", "Offset", "Visibility", "Z Index" ]
+
+[node name="YSort" type="YSort" parent="." index="1"]
 
 sort_enabled = true
 
-[node name="BuildingSprite" type="Sprite" parent="YSort" index="0"]
-
-texture = ExtResource( 2 )
-_sections_unfolded = [ "Material", "Offset", "Visibility" ]
-
-[node name="FlagSprite" type="Sprite" parent="." index="1"]
+[node name="FlagSprite" type="Sprite" parent="." index="2"]
 
 position = Vector2( -2, -10 )
-texture = ExtResource( 3 )
+texture = ExtResource( 4 )
 
-[node name="Lifebar" type="ProgressBar" parent="." index="2"]
+[node name="DebugUI" type="Node2D" parent="." index="3"]
+
+z_index = 1000
+z_as_relative = false
+_sections_unfolded = [ "Z Index" ]
+
+[node name="Lifebar" type="ProgressBar" parent="DebugUI" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -114,7 +123,7 @@ rounded = false
 percent_visible = false
 _sections_unfolded = [ "Mouse", "Rect", "Theme", "Visibility", "custom_styles" ]
 
-[node name="PopulationLabel" type="Label" parent="." index="3"]
+[node name="PopulationLabel" type="Label" parent="DebugUI" index="1"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -138,7 +147,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin" ]
 
-[node name="FearLabel" type="Label" parent="." index="4"]
+[node name="FearLabel" type="Label" parent="DebugUI" index="2"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -161,7 +170,7 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin", "Mouse" ]
 
-[node name="StateLabel" type="Label" parent="." index="5"]
+[node name="StateLabel" type="Label" parent="DebugUI" index="3"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -185,42 +194,42 @@ lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "Anchor", "Margin", "Mouse", "custom_fonts", "custom_styles" ]
 
-[node name="GrowthTimer" type="Timer" parent="." index="6"]
+[node name="GrowthTimer" type="Timer" parent="." index="4"]
 
 process_mode = 1
 wait_time = 2.0
 one_shot = false
 autostart = true
 
-[node name="FearGrowthTimer" type="Timer" parent="." index="7"]
+[node name="FearGrowthTimer" type="Timer" parent="." index="5"]
 
 process_mode = 1
 wait_time = 2.0
 one_shot = false
 autostart = false
 
-[node name="TravelTimer" type="Timer" parent="." index="8"]
+[node name="TravelTimer" type="Timer" parent="." index="6"]
 
 process_mode = 1
-wait_time = 20.0
+wait_time = 25.0
 one_shot = false
 autostart = true
 
-[node name="SingleTravelTimer" type="Timer" parent="." index="9"]
+[node name="SingleTravelTimer" type="Timer" parent="." index="7"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = false
 autostart = false
 
-[node name="CombatTimer" type="Timer" parent="." index="10"]
+[node name="CombatTimer" type="Timer" parent="." index="8"]
 
 process_mode = 1
 wait_time = 2.0
 one_shot = false
 autostart = false
 
-[node name="ClickArea" type="Area2D" parent="." index="11"]
+[node name="ClickArea" type="Area2D" parent="." index="9"]
 
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )

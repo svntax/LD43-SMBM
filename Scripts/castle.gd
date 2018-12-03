@@ -31,7 +31,8 @@ func _process(delta):
 
 func spawnSoldier(origin, target, targetVillage):
     var soldier = soldierObject.instance()
-    find_node("YSort").add_child(soldier)
+    #find_node("YSort").add_child(soldier)
+    add_child(soldier)
     soldier.global_position = origin
     soldier.spawnPos = origin
     soldier.updateOriginalPos()

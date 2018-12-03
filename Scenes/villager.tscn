@@ -1,10 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Scripts/person_unit.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/villager_spritesheet.png" type="Texture" id=2]
-[ext_resource path="res://Sprites/villager.png" type="Texture" id=3]
-[ext_resource path="res://Sprites/warrior.png" type="Texture" id=4]
-[ext_resource path="res://Sprites/oxcart.png" type="Texture" id=5]
+[ext_resource path="res://Scripts/auto_y_sort.gd" type="Script" id=3]
+[ext_resource path="res://Sprites/oxcart.png" type="Texture" id=4]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -36,25 +35,14 @@ autostart = false
 
 [node name="Sprite" type="Sprite" parent="." index="1"]
 
+z_as_relative = false
 texture = ExtResource( 2 )
 hframes = 6
 region_rect = Rect2( 0, 0, 8, 11 )
-_sections_unfolded = [ "Animation", "Region" ]
+script = ExtResource( 3 )
+_sections_unfolded = [ "Animation", "Region", "Z Index" ]
 
-[node name="Sprite1" type="Sprite" parent="." index="2"]
-
-visible = false
-texture = ExtResource( 3 )
-_sections_unfolded = [ "Material", "Offset", "Transform" ]
-
-[node name="Sprite2" type="Sprite" parent="." index="3"]
-
-visible = false
-position = Vector2( 0, -1 )
-texture = ExtResource( 4 )
-_sections_unfolded = [ "Material", "Offset", "Transform" ]
-
-[node name="Hitbox" type="Area2D" parent="." index="4"]
+[node name="Hitbox" type="Area2D" parent="." index="2"]
 
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -68,19 +56,21 @@ audio_bus_name = "Master"
 
 shape = SubResource( 1 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="5"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="3"]
 
 position = Vector2( 0, 4 )
 shape = SubResource( 2 )
 disabled = true
 
-[node name="Oxcart" type="Sprite" parent="." index="6"]
+[node name="Oxcart" type="Sprite" parent="." index="4"]
 
 visible = false
-texture = ExtResource( 5 )
+z_as_relative = false
+texture = ExtResource( 4 )
 hframes = 2
 region_rect = Rect2( 0, 0, 17, 7 )
-_sections_unfolded = [ "Animation", "Offset", "Region" ]
+script = ExtResource( 3 )
+_sections_unfolded = [ "Animation", "Offset", "Region", "Transform", "Z Index" ]
 
 [connection signal="timeout" from="WanderTimer" to="." method="_on_WanderTimer_timeout"]
 

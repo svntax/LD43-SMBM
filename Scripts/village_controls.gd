@@ -66,14 +66,16 @@ func _process(delta):
 
 func addVillager():
     var villager = villagerObject.instance()
-    get_node("YSort").add_child(villager)
-    villager.translate(Vector2(rand_range(-22, 22), rand_range(-22, 22)))
+    #get_node("YSort").add_child(villager)
+    add_child(villager)
+    villager.translate(Vector2(rand_range(-18, 18), rand_range(-18, 18)))
     villager.updateOriginalPos()
     localVillagers.append(villager)
 
 func addTravelingVillager():
     var villager = villagerObject.instance()
-    get_node("YSort").add_child(villager)
+    #get_node("YSort").add_child(villager)
+    add_child(villager)
     villager.translate(Vector2(0, 8))
     villager.updateOriginalPos()
     villager.startTraveling()

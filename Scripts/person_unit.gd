@@ -38,7 +38,7 @@ func _ready():
     
     oxcart = find_node("Oxcart")
     
-    homeVillage = get_parent().get_parent()
+    homeVillage = get_parent()
     castle = get_tree().get_root().get_node("Root").find_node("Castle")
 
 func pickRandomVillagerSprite():
@@ -109,7 +109,7 @@ func startTraveling():
     find_node("Oxcart").show()
     moveSpeed = 6
     travelingToCastle = true
-    nextPos = castle.global_position + Vector2(0, 18)
+    nextPos = castle.global_position + Vector2(0, 22)
     moveUnitTo(nextPos)
     if(nextPos.x < self.global_position.x):
         find_node("Oxcart").flip_h = true
