@@ -4,7 +4,7 @@
 [ext_resource path="res://Sprites/villager_spritesheet.png" type="Texture" id=2]
 [ext_resource path="res://Sprites/villager.png" type="Texture" id=3]
 [ext_resource path="res://Sprites/warrior.png" type="Texture" id=4]
-[ext_resource path="res://icon.png" type="Texture" id=5]
+[ext_resource path="res://Sprites/oxcart.png" type="Texture" id=5]
 
 [sub_resource type="CapsuleShape2D" id=1]
 
@@ -74,13 +74,13 @@ position = Vector2( 0, 4 )
 shape = SubResource( 2 )
 disabled = true
 
-[node name="TravelingIcon" type="Sprite" parent="." index="6"]
+[node name="Oxcart" type="Sprite" parent="." index="6"]
 
 visible = false
-position = Vector2( 0, -10 )
-scale = Vector2( 0.1, 0.1 )
 texture = ExtResource( 5 )
-_sections_unfolded = [ "Transform" ]
+hframes = 2
+region_rect = Rect2( 0, 0, 17, 7 )
+_sections_unfolded = [ "Animation", "Offset", "Region" ]
 
 [connection signal="timeout" from="WanderTimer" to="." method="_on_WanderTimer_timeout"]
 

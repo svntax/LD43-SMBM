@@ -11,6 +11,8 @@ var nextPos
 var homeVillage #Reference to original village
 var castle
 
+var oxcart
+
 var movingBackToCastle
 var travelingToCastle
 var travelingBackToVillage
@@ -33,6 +35,8 @@ func _ready():
     wanderTimer.start()
     
     pickRandomVillagerSprite()
+    
+    oxcart = find_node("Oxcart")
     
     homeVillage = get_parent().get_parent()
     castle = get_tree().get_root().get_node("Root").find_node("Castle")
@@ -93,15 +97,22 @@ func sendToCastle():
 func travelBackToVillage():
     nextPos = homeVillage.global_position + Vector2(0, 8)
     moveUnitTo(nextPos)
+    find_node("Oxcart").frame = 1
+    if(nextPos.x < self.global_position.x):
+        oxcart.flip_h = true
+    else:
+        oxcart.flip_h = false
 
 func startTraveling():
     wanderTimer.stop()
-    #TODO debug
-    find_node("TravelingIcon").show()
-    moveSpeed = 12
+    find_node("Sprite").hide()
+    find_node("Oxcart").show()
+    moveSpeed = 6
     travelingToCastle = true
     nextPos = castle.global_position + Vector2(0, 18)
     moveUnitTo(nextPos)
+    if(nextPos.x < self.global_position.x):
+        find_node("Oxcart").flip_h = true
 
 func moveUnitTo(nextPos):
     reachedNextPos = false

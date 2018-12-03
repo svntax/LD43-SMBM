@@ -4,7 +4,7 @@ var GROWTH_RATE = 0.035
 var DEATH_RATE = 0.33
 #var FEAR_GROWTH_ON_ATTACK = 0.15
 
-var FEAR_GROWTH_WHILE_AT_WAR = 0.05
+var FEAR_GROWTH_WHILE_AT_WAR = 0.5 #based on current number of attacking soldiers
 var FEAR_GROWTH_PER_REMAINING_SOLDIER = 0.06
 var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
@@ -24,6 +24,7 @@ var fearLabel
 var attackingSoldiers
 var soldiersAmount
 var localVillagers
+var travelersLeft
 
 var PEACE_STATE = 0
 var WAR_STATE = 1
@@ -44,6 +45,7 @@ func _ready():
     localVillagers = []
     attackingSoldiers = []
     soldiersAmount = 0
+    travelersLeft = 0
     currentState = PEACE_STATE
     prevPopulation = population
     isBeingTargeted = false
@@ -72,7 +74,7 @@ func addVillager():
 func addTravelingVillager():
     var villager = villagerObject.instance()
     get_node("YSort").add_child(villager)
-    villager.translate(Vector2(rand_range(-12, 12), rand_range(0, 8)))
+    villager.translate(Vector2(0, 8))
     villager.updateOriginalPos()
     villager.startTraveling()
 
@@ -217,7 +219,8 @@ func _on_GrowthTimer_timeout():
 
 func _on_FearGrowthTimer_timeout():
     if(currentState == WAR_STATE):
-        increaseFear(maxFear * FEAR_GROWTH_WHILE_AT_WAR)
+        var amount = FEAR_GROWTH_WHILE_AT_WAR * attackingSoldiers.size()
+        increaseFear(amount)
         if(currentFear >= 50):
             sendRemainingSoldiersToCastle()          
 
@@ -230,8 +233,17 @@ func _on_ClickArea_input_event(viewport, event, shape_idx):
 func _on_TravelTimer_timeout():
     var amount = floor(population * TRAVELING_VILLAGERS_PERCENT)
     if(amount > 0):
-        for i in range(amount):
-            addTravelingVillager()
+        travelersLeft = amount
+        find_node("TravelTimer").stop()
+        find_node("SingleTravelTimer").start()
 
 func _on_CombatTimer_timeout():
     runCombatStep()
+
+func _on_SingleTravelTimer_timeout():
+    travelersLeft -= 1
+    addTravelingVillager()
+    if(travelersLeft <= 0):
+        travelersLeft = 0
+        find_node("SingleTravelTimer").stop()
+        find_node("TravelTimer").start()

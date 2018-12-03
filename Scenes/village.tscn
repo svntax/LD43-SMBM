@@ -195,25 +195,32 @@ autostart = true
 [node name="FearGrowthTimer" type="Timer" parent="." index="7"]
 
 process_mode = 1
-wait_time = 4.0
+wait_time = 2.0
 one_shot = false
 autostart = false
 
 [node name="TravelTimer" type="Timer" parent="." index="8"]
 
 process_mode = 1
-wait_time = 8.0
+wait_time = 20.0
 one_shot = false
 autostart = true
 
-[node name="CombatTimer" type="Timer" parent="." index="9"]
+[node name="SingleTravelTimer" type="Timer" parent="." index="9"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="CombatTimer" type="Timer" parent="." index="10"]
 
 process_mode = 1
 wait_time = 2.0
 one_shot = false
 autostart = false
 
-[node name="ClickArea" type="Area2D" parent="." index="10"]
+[node name="ClickArea" type="Area2D" parent="." index="11"]
 
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -232,6 +239,8 @@ shape = SubResource( 3 )
 [connection signal="timeout" from="FearGrowthTimer" to="." method="_on_FearGrowthTimer_timeout"]
 
 [connection signal="timeout" from="TravelTimer" to="." method="_on_TravelTimer_timeout"]
+
+[connection signal="timeout" from="SingleTravelTimer" to="." method="_on_SingleTravelTimer_timeout"]
 
 [connection signal="timeout" from="CombatTimer" to="." method="_on_CombatTimer_timeout"]
 
