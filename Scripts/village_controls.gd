@@ -12,7 +12,7 @@ var INITIAL_POPULATION = 10
 var INITIAL_FEAR = 40
 
 #Must be decimal numbers
-var SOLDIERS_PER_VILLAGER_DEATH = 3.0
+var SOLDIERS_PER_VILLAGER_DEATH = 5.0
 var VILLAGERS_PER_SOLDIER_DEATH = 20.0
 
 var TRAVELING_VILLAGERS_PERCENT = 0.2
@@ -149,6 +149,13 @@ func increasePopulation(amount):
     lifebar.value = population
 
 func runCombatStep():
+    #Calculate fear first
+    if(currentState == WAR_STATE):
+        var amount = FEAR_GROWTH_WHILE_AT_WAR * attackingSoldiers.size()
+        increaseFear(amount)
+        if(currentFear >= 50):
+            sendRemainingSoldiersToCastle()
+            return
     print("==COMBAT STEP==")
     var soldiersDeathAmount = localVillagers.size() / VILLAGERS_PER_SOLDIER_DEATH
     var villagersDeathAmount = attackingSoldiers.size() / SOLDIERS_PER_VILLAGER_DEATH
@@ -170,6 +177,8 @@ func changeToWar():
     currentState = WAR_STATE
     find_node("CombatTimer").start()
     find_node("FearGrowthTimer").start()
+    for v in localVillagers:
+        v.startMovingFrantically()    
     #DEBUG
     find_node("StateLabel").text = "WAR"
 
@@ -178,6 +187,8 @@ func changeToPeace():
     currentState = PEACE_STATE
     find_node("FearGrowthTimer").stop()
     find_node("CombatTimer").stop()
+    for v in localVillagers:
+        v.stopMovingFrantically()
     #DEBUG
     find_node("StateLabel").text = "PEACE"
 
@@ -226,11 +237,13 @@ func _on_GrowthTimer_timeout():
         reduceFear(maxFear * FEAR_DECREASE_WHILE_AT_PEACE)
 
 func _on_FearGrowthTimer_timeout():
-    if(currentState == WAR_STATE):
-        var amount = FEAR_GROWTH_WHILE_AT_WAR * attackingSoldiers.size()
-        increaseFear(amount)
-        if(currentFear >= 50):
-            sendRemainingSoldiersToCastle()          
+    pass
+    #Changed so that fear grows at the same rate as combat steps
+#    if(currentState == WAR_STATE):
+#        var amount = FEAR_GROWTH_WHILE_AT_WAR * attackingSoldiers.size()
+#        increaseFear(amount)
+#        if(currentFear >= 50):
+#            sendRemainingSoldiersToCastle()
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):

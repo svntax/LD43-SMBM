@@ -5,7 +5,7 @@
 [ext_resource path="res://Scripts/auto_y_sort.gd" type="Script" id=3]
 [ext_resource path="res://Scenes/white_flag.tscn" type="PackedScene" id=4]
 
-[node name="Castle" type="Node2D" index="0"]
+[node name="Castle" type="Node2D"]
 
 script = ExtResource( 1 )
 

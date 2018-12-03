@@ -1,10 +1,15 @@
 extends KinematicBody2D
 
+var NORMAL_SPEED = 4
+var TRAVEL_SPEED = 6 #oxcart speed
+var FRANTIC_SPEED = 24
+var MOVE_TO_CASTLE_SPEED = 16
+
 var originalPos
 var isVillager
 var reachedNextPos
 
-var moveSpeed = 4
+var moveSpeed = NORMAL_SPEED
 var moveVel
 var nextPos
 
@@ -49,23 +54,6 @@ func pickRandomVillagerSprite():
 func updateOriginalPos():
     originalPos = self.global_position
 
-#func sendToCastle():
-#    isVillager = false
-#    isSkeleton = true
-#    find_node(spriteName).hide()
-#    find_node("SkeletonSprite").show()
-#
-#    reachedNextPos = false
-#    moveSpeed = 12
-#    var castle = get_tree().get_root().get_node("Root").find_node("Castle")
-#    var angle = rand_range(0, 360)
-#    var length = rand_range(24, 32)
-#    var nx = length * cos(deg2rad(angle))
-#    var ny = length * sin(deg2rad(angle))
-#    nextPos = castle.global_position + Vector2(nx, ny)
-#    originalPos = nextPos
-#    moveVel = (nextPos - self.global_position).normalized() * moveSpeed
-
 func _process(delta):
     # Called every frame. Delta is time since last frame.
     # Update game logic here.
@@ -90,7 +78,7 @@ func _physics_process(delta):
 
 func sendToCastle():
     wanderTimer.stop()
-    moveSpeed = 16
+    moveSpeed = MOVE_TO_CASTLE_SPEED
     movingBackToCastle = true
     nextPos = castle.global_position + Vector2(0, 18)
     moveUnitTo(nextPos)
@@ -110,12 +98,22 @@ func startTraveling():
     find_node("Sprite").hide()
     find_node("SpriteUp").hide()
     find_node("Oxcart").show()
-    moveSpeed = 6
+    moveSpeed = TRAVEL_SPEED
     travelingToCastle = true
     nextPos = castle.global_position + Vector2(0, 22)
     moveUnitTo(nextPos)
     if(nextPos.x < self.global_position.x):
         find_node("Oxcart").flip_h = true
+
+func startMovingFrantically():
+    moveSpeed = FRANTIC_SPEED
+    wanderTimer.stop()
+    wanderTimer.wait_time = 0.2
+    wanderTimer.start()
+
+func stopMovingFrantically():
+    moveSpeed = NORMAL_SPEED
+    wanderTimer.wait_time = rand_range(5, 10)
 
 func moveUnitTo(nextPos):
     reachedNextPos = false
@@ -130,7 +128,10 @@ func moveUnitTo(nextPos):
 
 func _on_WanderTimer_timeout():
     if(!movingBackToCastle):
-        wanderTimer.wait_time = rand_range(5, 10)
+        if(homeVillage.currentState == homeVillage.WAR_STATE):
+            wanderTimer.wait_time = 0.2
+        elif(homeVillage.currentState == homeVillage.PEACE_STATE):
+            wanderTimer.wait_time = rand_range(5, 10)
         reachedNextPos = false
         nextPos = originalPos + Vector2(rand_range(-8, 8), rand_range(-8, 8))
         moveVel = (nextPos - self.global_position).normalized() * moveSpeed

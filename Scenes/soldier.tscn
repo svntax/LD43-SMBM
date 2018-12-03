@@ -70,4 +70,13 @@ playback_speed = 1.0
 anims/bobbing_anim = SubResource( 2 )
 blend_times = [  ]
 
+[node name="FranticWanderTimer" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 0.2
+one_shot = false
+autostart = false
+
+[connection signal="timeout" from="FranticWanderTimer" to="." method="_on_FranticWanderTimer_timeout"]
+
 

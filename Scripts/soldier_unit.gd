@@ -1,10 +1,13 @@
 extends KinematicBody2D
 
+var NORMAL_SPEED = 16
+var FRANTIC_SPEED = 24
+
 var spawnPos
 var originalPos
 var reachedNextPos
 
-var moveSpeed = 16
+var moveSpeed = NORMAL_SPEED
 var moveVel
 var nextPos
 var firstMove
@@ -15,6 +18,7 @@ var movingToCastleDoor
 
 var targetVillage
 var castle
+var franticPosOrigin
 
 var wanderTimer
 
@@ -30,6 +34,7 @@ func _ready():
     
     moveVel = Vector2()
     nextPos = Vector2()
+    franticPosOrigin = Vector2()
     
     castle = get_tree().get_root().get_node("Root").find_node("Castle")
     
@@ -42,6 +47,8 @@ func updateOriginalPos():
 
 func sendToCastle():
     movingBackToCastle = true
+    moveSpeed = NORMAL_SPEED
+    find_node("FranticWanderTimer").stop()
     moveUnitTo(spawnPos)
 
 func _process(delta):
@@ -63,8 +70,7 @@ func _physics_process(delta):
         elif(movingToTargetVillage):
             movingToTargetVillage = false
             targetVillage.addSoldier(self)
-            #TODO start moving frantically
-            find_node("DebugSprite").show()
+            startMovingFrantically()
         elif(movingBackToCastle):
             movingBackToCastle = false
             movingToCastleDoor = true
@@ -73,14 +79,17 @@ func _physics_process(delta):
             movingToCastleDoor = false
             castle.increasePopulation(1)
             self.queue_free()
-        
+
+func startMovingFrantically():
+    franticPosOrigin = self.global_position
+    find_node("FranticWanderTimer").start()
+    moveSpeed = FRANTIC_SPEED
+
 func moveUnitTo(pos):
     reachedNextPos = false
     nextPos = pos
     moveVel = (nextPos - self.global_position).normalized() * moveSpeed
 
-#func _on_WanderTimer_timeout():
-#    wanderTimer.wait_time = rand_range(5, 10)
-#    reachedNextPos = false
-#    nextPos = originalPos + Vector2(rand_range(-8, 8), rand_range(-8, 8))
-#    moveVel = (nextPos - self.position).normalized() * moveSpeed
+func _on_FranticWanderTimer_timeout():
+    if(!movingBackToCastle):
+        moveUnitTo(franticPosOrigin + Vector2(rand_range(-8, 8), rand_range(-8, 8)))
