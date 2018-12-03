@@ -66,7 +66,7 @@ anti_aliasing_size = 1
 custom_solver_bias = 0.0
 radius = 14.0
 
-[node name="Village" type="Node2D" groups=[
+[node name="Village" type="Node2D" index="0" groups=[
 "Villages",
 ]]
 
@@ -115,7 +115,6 @@ _sections_unfolded = [ "Mouse", "Rect", "Theme", "Visibility", "custom_styles" ]
 
 [node name="PopulationLabel" type="Label" parent="DebugUI" index="1"]
 
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -140,7 +139,6 @@ _sections_unfolded = [ "Anchor", "Margin" ]
 
 [node name="FearLabel" type="Label" parent="DebugUI" index="2"]
 
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

@@ -15,6 +15,7 @@ var firstMove
 var movingToTargetVillage
 var movingBackToCastle
 var movingToCastleDoor
+var runningAway
 
 var targetVillage
 var castle
@@ -31,6 +32,7 @@ func _ready():
     movingToTargetVillage = false
     movingBackToCastle = false
     movingToCastleDoor = false
+    runningAway = false
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -50,6 +52,13 @@ func sendToCastle():
     moveSpeed = NORMAL_SPEED
     find_node("FranticWanderTimer").stop()
     moveUnitTo(spawnPos)
+
+func sendToCastleFast():
+    movingBackToCastle = true
+    moveSpeed = FRANTIC_SPEED + 10
+    runningAway = true
+    find_node("FranticWanderTimer").stop()
+    moveUnitTo(castle.global_position + Vector2(0, 18))
 
 func _process(delta):
     # Called every frame. Delta is time since last frame.
@@ -78,6 +87,9 @@ func _physics_process(delta):
         elif(movingToCastleDoor):
             movingToCastleDoor = false
             castle.increasePopulation(1)
+            self.queue_free()
+        if(runningAway):
+            runningAway = false
             self.queue_free()
 
 func startMovingFrantically():

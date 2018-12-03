@@ -22,6 +22,7 @@ var movingBackToCastle
 var travelingToCastle
 var travelingBackToVillage
 var hidingInVillage
+var attackingCastle
 
 var wanderTimer
 
@@ -33,6 +34,7 @@ func _ready():
     travelingToCastle = false
     travelingBackToVillage = false
     hidingInVillage = false
+    attackingCastle = false
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -80,11 +82,21 @@ func _physics_process(delta):
         if(hidingInVillage):
             hidingInVillage = false
             self.hide()
+        if(attackingCastle):
+            attackingCastle = false
+            self.queue_free()
 
 func sendToCastle():
     wanderTimer.stop()
     moveSpeed = MOVE_TO_CASTLE_SPEED
     movingBackToCastle = true
+    nextPos = castle.global_position + Vector2(0, 18)
+    moveUnitTo(nextPos)
+
+func attackCastle():
+    wanderTimer.stop()
+    moveSpeed = FRANTIC_SPEED + 2
+    attackingCastle = true
     nextPos = castle.global_position + Vector2(0, 18)
     moveUnitTo(nextPos)
 

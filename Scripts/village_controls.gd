@@ -88,9 +88,10 @@ func reduceFear(amount):
     currentFear -= amount
     if(currentFear < 0):
         currentFear = 0
-        #TODO rebellion
     find_node("WhiteFlag").updatePos(currentFear, maxFear)
     fearLabel.text = "Fear: " + str(currentFear) + "%"
+    if(floor(currentFear) <= 0):
+        get_parent().startRebellion()
 
 func increaseFear(amount):
     currentFear += amount
@@ -133,6 +134,19 @@ func sendVillagerToCastle(villager):
     populationLabel.text = "Population: " + str(population)
     lifebar.value = population
 
+func rebel():
+    changeToPeace()
+    find_node("TravelTimer").stop()
+    find_node("SingleTravelTimer").stop()
+    find_node("GrowthTimer").stop()
+    while(!attackingSoldiers.empty()):
+        var soldier = attackingSoldiers.pop_front()
+        if(soldier != null):
+            soldier.sendToCastleFast()
+    soldiersAmount = 0
+    for villager in localVillagers:
+        villager.attackCastle()
+
 func increasePopulation(amount):
     population += amount
     #print(str(prevPopulation) + " vs " + str(floor(population)))
@@ -161,7 +175,7 @@ func runCombatStep():
     var villagersDeathAmount = attackingSoldiers.size() / SOLDIERS_PER_VILLAGER_DEATH
     print("Villagers death: " + str(villagersDeathAmount))
     print("Soldiers death: " + str(soldiersDeathAmount))
-    #TODO order of deaths matters, right now villagers are damaged first
+    #Order of deaths matters, right now villagers are damaged first
     reducePopulation(villagersDeathAmount)
     if(floor(population) <= 0):
         population = 0 #Killed too many villagers, village is now empty
@@ -271,8 +285,6 @@ func _on_FearGrowthTimer_timeout():
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
-#        if(!isBeingTargeted): #TODO check if necessary
-#            #isBeingTargeted = true
         var successfulAttack = castle.sendSoldiersTo(self)
 
 func _on_TravelTimer_timeout():

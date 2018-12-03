@@ -1,6 +1,7 @@
 extends Node
 
 var invasionArrived = false
+var rebellionStarted = false
 var soldiersAmountAtEnd = 0
 
 func _ready():
