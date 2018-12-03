@@ -63,7 +63,7 @@ func _physics_process(delta):
         elif(movingToTargetVillage):
             movingToTargetVillage = false
             targetVillage.addSoldier(self)
-            #TODO debug
+            #TODO start moving frantically
             find_node("DebugSprite").show()
         elif(movingBackToCastle):
             movingBackToCastle = false

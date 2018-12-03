@@ -14,6 +14,8 @@ func ySort():
     #Hard-coded offset for castle object
     if(get_parent().name == "Castle"):
         globalY -= 6
+    if(get_parent().name == "Village"):
+        globalY = self.global_position.y + 13
     if(globalY < -4000):
         globalY = -4000
     if(globalY > 4000):

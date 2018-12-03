@@ -1,16 +1,36 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/soldier_unit.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/knight.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/auto_y_sort.gd" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/knight_spritesheet.png" type="Texture" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
 custom_solver_bias = 0.0
 extents = Vector2( 3, 2 )
 
-[node name="Soldier" type="KinematicBody2D" groups=[
+[sub_resource type="Animation" id=2]
+
+resource_name = "bobbing_anim"
+length = 0.4
+loop = true
+step = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+
+[node name="Soldier" type="KinematicBody2D" index="0" groups=[
 "Soldiers",
 ]]
 
@@ -22,6 +42,7 @@ script = ExtResource( 1 )
 
 [node name="Sprite1" type="Sprite" parent="." index="0"]
 
+visible = false
 z_as_relative = false
 texture = ExtResource( 2 )
 script = ExtResource( 3 )
@@ -33,12 +54,29 @@ position = Vector2( 0, 3 )
 shape = SubResource( 1 )
 disabled = true
 
-[node name="DebugSprite" type="Sprite" parent="." index="2"]
+[node name="Sprite" type="Sprite" parent="." index="2"]
+
+texture = ExtResource( 4 )
+hframes = 2
+script = ExtResource( 3 )
+_sections_unfolded = [ "Animation", "Transform" ]
+
+[node name="DebugSprite" type="Sprite" parent="." index="3"]
 
 visible = false
 position = Vector2( 0, -10 )
 scale = Vector2( 0.1, 0.1 )
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
+
+root_node = NodePath("..")
+autoplay = "bobbing_anim"
+playback_process_mode = 1
+playback_default_blend_time = 0.0
+playback_speed = 1.0
+anims/bobbing_anim = SubResource( 2 )
+blend_times = [  ]
 
 

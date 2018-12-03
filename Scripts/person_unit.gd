@@ -44,6 +44,7 @@ func _ready():
 func pickRandomVillagerSprite():
     var choice = randi() % 6
     find_node("Sprite").frame = choice
+    find_node("SpriteUp").frame = choice
 
 func updateOriginalPos():
     originalPos = self.global_position
@@ -105,7 +106,9 @@ func travelBackToVillage():
 
 func startTraveling():
     wanderTimer.stop()
+    find_node("AnimationPlayer").stop()
     find_node("Sprite").hide()
+    find_node("SpriteUp").hide()
     find_node("Oxcart").show()
     moveSpeed = 6
     travelingToCastle = true

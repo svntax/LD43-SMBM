@@ -80,7 +80,7 @@ func addTravelingVillager():
     var villager = villagerObject.instance()
     #get_node("YSort").add_child(villager)
     add_child(villager)
-    villager.translate(Vector2(0, 8))
+    villager.translate(Vector2(0, 16))
     villager.updateOriginalPos()
     villager.startTraveling()
 

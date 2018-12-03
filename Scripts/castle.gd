@@ -4,10 +4,10 @@ extends Node2D
 var GROWTH_RATE = 0.015
 
 #Number of soldiers at the start
-var INITIAL_POPULATION = 20
+var INITIAL_POPULATION = 25
 
 #The number of soldiers needed minimum to win
-var TARGET_SOLDIER_AMOUNT = 50
+var TARGET_SOLDIER_AMOUNT = 100
 
 var population
 var prevPopulation
@@ -55,7 +55,7 @@ func sendSoldiersTo(targetVillage):
         return false
     var origin = self.global_position + Vector2(0, 18)
     for i in range(amount):
-        spawnSoldier(origin, origin + Vector2(rand_range(-12, 12), rand_range(0, 12)), targetVillage)
+        spawnSoldier(origin, origin + Vector2(rand_range(-8, 8), rand_range(0, 8)), targetVillage)
     
     return true
 
