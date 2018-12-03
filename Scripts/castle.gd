@@ -3,6 +3,12 @@ extends Node2D
 #Based on total population
 var GROWTH_RATE = 0.015
 
+#Number of soldiers at the start
+var INITIAL_POPULATION = 20
+
+#The number of soldiers needed minimum to win
+var TARGET_SOLDIER_AMOUNT = 50
+
 var population
 var prevPopulation
 var populationLabel
@@ -11,10 +17,11 @@ var soldierObject = load("res://Scenes/soldier.tscn")
 
 func _ready():
     randomize()
-    population = 10
+    population = INITIAL_POPULATION
     prevPopulation = population
     populationLabel = find_node("PopulationLabel")
     populationLabel.text = "Soldiers: " + str(population)
+    find_node("WhiteFlag").updatePos(population, TARGET_SOLDIER_AMOUNT)
 #    for i in range(population):
 #        addVillager()
 
@@ -56,6 +63,7 @@ func reducePopulation(amount):
     population -= amount
     if(population < 0):
         population = 0
+    find_node("WhiteFlag").updatePos(population, TARGET_SOLDIER_AMOUNT)
     populationLabel.text = "Soldiers: " + str(population)
 
 func increasePopulation(amount):
@@ -65,7 +73,7 @@ func increasePopulation(amount):
 #        for i in range(floor(population) - prevPopulation):
 #            addVillager()
         prevPopulation = floor(population)
-        
+    find_node("WhiteFlag").updatePos(population, TARGET_SOLDIER_AMOUNT)
     populationLabel.text = "Soldiers: " + str(population)
 
 func _on_GrowthTimer_timeout():

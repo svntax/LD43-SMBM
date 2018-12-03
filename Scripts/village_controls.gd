@@ -2,15 +2,18 @@ extends Node2D
 
 var GROWTH_RATE = 0.035
 var DEATH_RATE = 0.33
-#var FEAR_GROWTH_ON_ATTACK = 0.15
 
 var FEAR_GROWTH_WHILE_AT_WAR = 0.5 #based on current number of attacking soldiers
 var FEAR_GROWTH_PER_REMAINING_SOLDIER = 0.06
 var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
+#Number of villagers at start
+var INITIAL_POPULATION = 10
+var INITIAL_FEAR = 40
+
 #Must be decimal numbers
-var SOLDIERS_PER_VILLAGER_DEATH = 5.0
-var VILLAGERS_PER_SOLDIER_DEATH = 15.0
+var SOLDIERS_PER_VILLAGER_DEATH = 3.0
+var VILLAGERS_PER_SOLDIER_DEATH = 20.0
 
 var TRAVELING_VILLAGERS_PERCENT = 0.2
 
@@ -40,8 +43,8 @@ var villagerObject = load("res://Scenes/villager.tscn")
 
 func _ready():
     randomize()
-    population = 10
-    currentFear = 40
+    population = INITIAL_POPULATION
+    currentFear = INITIAL_FEAR
     localVillagers = []
     attackingSoldiers = []
     soldiersAmount = 0
@@ -54,6 +57,7 @@ func _ready():
     lifebar = find_node("Lifebar")
     populationLabel.text = "Population: " + str(population)
     fearLabel.text = "Fear: " + str(round(currentFear)) + "%"
+    find_node("WhiteFlag").updatePos(currentFear, maxFear)
     for i in range(population):
         addVillager()
     
@@ -84,13 +88,15 @@ func reduceFear(amount):
     currentFear -= amount
     if(currentFear < 0):
         currentFear = 0
-        #TODO rebellion?
+        #TODO rebellion
+    find_node("WhiteFlag").updatePos(currentFear, maxFear)
     fearLabel.text = "Fear: " + str(currentFear) + "%"
 
 func increaseFear(amount):
     currentFear += amount
     if(currentFear > 100):
         currentFear = 100
+    find_node("WhiteFlag").updatePos(currentFear, maxFear)
     fearLabel.text = "Fear: " + str(currentFear) + "%"
 
 func reducePopulation(amount):
@@ -248,4 +254,5 @@ func _on_SingleTravelTimer_timeout():
     if(travelersLeft <= 0):
         travelersLeft = 0
         find_node("SingleTravelTimer").stop()
+        find_node("TravelTimer").wait_time = 25 + (randi() % 7)
         find_node("TravelTimer").start()
