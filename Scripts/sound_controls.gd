@@ -27,6 +27,10 @@ func startClashSounds():
         find_node("ClashSoundsTimer").start()
 
 func stopClashSounds():
+    for village in get_tree().get_nodes_in_group("Villages"):
+        if(village.currentState == village.WAR_STATE):
+            return
+        
     clashSoundsPlaying = false
     find_node("ClashSoundsTimer").stop()
 

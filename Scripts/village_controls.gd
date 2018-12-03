@@ -184,7 +184,6 @@ func changeToWar():
     find_node("StateLabel").text = "WAR"
 
 func changeToPeace():
-    SoundHandler.stopClashSounds()
     print("==COMBAT END==")
     currentState = PEACE_STATE
     find_node("FearGrowthTimer").stop()
@@ -193,6 +192,7 @@ func changeToPeace():
         v.stopMovingFrantically()
     #DEBUG
     find_node("StateLabel").text = "PEACE"
+    SoundHandler.stopClashSounds()
 
 func addSoldier(soldierObj):
     if(currentState == PEACE_STATE):
