@@ -22,6 +22,8 @@ func _ready():
     clashSounds = [clashSound01, clashSound02, clashSound03, clashSound04, clashSound05]
 
 func startClashSounds():
+    if(Globals.invasionArrived):
+        return
     if(!clashSoundsPlaying):
         clashSoundsPlaying = true
         find_node("ClashSoundsTimer").start()

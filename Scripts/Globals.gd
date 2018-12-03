@@ -1,5 +1,8 @@
 extends Node
 
+var invasionArrived = false
+var soldiersAmountAtEnd = 0
+
 func _ready():
     print("Globals ready")
     pass

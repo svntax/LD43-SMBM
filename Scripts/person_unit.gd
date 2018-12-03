@@ -21,6 +21,7 @@ var oxcart
 var movingBackToCastle
 var travelingToCastle
 var travelingBackToVillage
+var hidingInVillage
 
 var wanderTimer
 
@@ -31,6 +32,7 @@ func _ready():
     movingBackToCastle = false
     travelingToCastle = false
     travelingBackToVillage = false
+    hidingInVillage = false
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -75,6 +77,9 @@ func _physics_process(delta):
         elif(travelingBackToVillage):
             travelingBackToVillage = false
             self.queue_free()
+        if(hidingInVillage):
+            hidingInVillage = false
+            self.hide()
 
 func sendToCastle():
     wanderTimer.stop()
@@ -91,6 +96,14 @@ func travelBackToVillage():
         oxcart.flip_h = true
     else:
         oxcart.flip_h = false
+
+#Runs when invaders arrive
+func hideInsideVillage():
+    wanderTimer.stop()
+    hidingInVillage = true
+    moveSpeed = FRANTIC_SPEED
+    nextPos = homeVillage.global_position + Vector2(0, 8)
+    moveUnitTo(nextPos)
 
 func startTraveling():
     wanderTimer.stop()

@@ -195,6 +195,11 @@ func changeToPeace():
     SoundHandler.stopClashSounds()
 
 func addSoldier(soldierObj):
+    if(Globals.invasionArrived):
+        changeToPeace()
+        soldierObj.sendToCastle()
+        soldiersAmount = 0
+        return
     if(currentState == PEACE_STATE):
         changeToWar()
     attackingSoldiers.append(soldierObj)
@@ -232,6 +237,21 @@ func sendRemainingSoldiersToCastle():
         if(soldier != null && !soldier.movingBackToCastle):
             soldier.sendToCastle()
     soldiersAmount = 0
+
+#Runs when the invaders have arrived
+func hideVillagers():
+    changeToPeace()
+    find_node("TravelTimer").stop()
+    find_node("SingleTravelTimer").stop()
+    find_node("GrowthTimer").stop()
+    while(!attackingSoldiers.empty()):
+        var soldier = attackingSoldiers.pop_front()
+        if(soldier != null):
+            soldier.sendToCastle()
+    soldiersAmount = 0
+    for villager in localVillagers:
+        villager.hideInsideVillage()
+    
 
 func _on_GrowthTimer_timeout():
     if(currentState == PEACE_STATE):

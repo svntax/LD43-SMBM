@@ -9,7 +9,7 @@
 [ext_resource path="res://Audio/clash04.wav" type="AudioStream" id=7]
 [ext_resource path="res://Audio/clash05.wav" type="AudioStream" id=8]
 
-[node name="Node" type="Node" index="0"]
+[node name="Node" type="Node"]
 
 script = ExtResource( 1 )
 
