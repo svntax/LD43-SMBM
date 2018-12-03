@@ -174,6 +174,7 @@ func runCombatStep():
     print("Remaining soldiers (int, float): " + str(attackingSoldiers.size()) + ", " + str(soldiersAmount))
 
 func changeToWar():
+    SoundHandler.startClashSounds()
     currentState = WAR_STATE
     find_node("CombatTimer").start()
     find_node("FearGrowthTimer").start()
@@ -183,6 +184,7 @@ func changeToWar():
     find_node("StateLabel").text = "WAR"
 
 func changeToPeace():
+    SoundHandler.stopClashSounds()
     print("==COMBAT END==")
     currentState = PEACE_STATE
     find_node("FearGrowthTimer").stop()
@@ -214,10 +216,11 @@ func killSoldiers(amount):
 
 func sendRemainingSoldiersToCastle():
     changeToPeace()
-    var count = attackingSoldiers.size()
+    var count = floor(attackingSoldiers.size() / 2)
+    var halfPopulation = population / 2
     #var i = 0
     #var localVillagers = get_tree().get_nodes_in_group("Villagers")
-    while(count > 0 && population >= 1 && !localVillagers.empty()):
+    while(count > 0 && population >= halfPopulation && !localVillagers.empty()):
         var v = localVillagers.pop_front()
         #i += 1
         if(v.homeVillage == self):
@@ -228,6 +231,7 @@ func sendRemainingSoldiersToCastle():
         var soldier = attackingSoldiers.pop_front()
         if(soldier != null && !soldier.movingBackToCastle):
             soldier.sendToCastle()
+    soldiersAmount = 0
 
 func _on_GrowthTimer_timeout():
     if(currentState == PEACE_STATE):

@@ -37,6 +37,7 @@ func _process(delta):
 #    villager.updateOriginalPos()
 
 func spawnSoldier(origin, target, targetVillage):
+    SoundHandler.clickSound.play()
     var soldier = soldierObject.instance()
     #find_node("YSort").add_child(soldier)
     add_child(soldier)

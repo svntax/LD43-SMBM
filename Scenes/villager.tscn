@@ -67,6 +67,7 @@ autostart = false
 
 [node name="Sprite" type="Sprite" parent="." index="1"]
 
+visible = false
 z_as_relative = false
 texture = ExtResource( 2 )
 hframes = 6
@@ -76,7 +77,6 @@ _sections_unfolded = [ "Animation", "Region", "Visibility", "Z Index" ]
 
 [node name="SpriteUp" type="Sprite" parent="." index="2"]
 
-visible = false
 texture = ExtResource( 4 )
 hframes = 6
 script = ExtResource( 3 )
