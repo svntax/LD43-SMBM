@@ -8,8 +8,9 @@ var FEAR_GROWTH_WHILE_AT_WAR = 0.05
 var FEAR_GROWTH_PER_REMAINING_SOLDIER = 0.06
 var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
-var SOLDIERS_PER_VILLAGE_DEATH = 5
-var VILLAGERS_PER_SOLDIER_DEATH = 15
+#Must be floats
+var SOLDIERS_PER_VILLAGER_DEATH = 5.0
+var VILLAGERS_PER_SOLDIER_DEATH = 15.0
 
 var TRAVELING_VILLAGERS_PERCENT = 0.2
 
@@ -86,22 +87,26 @@ func increaseFear(amount):
         currentFear = 100
     fearLabel.text = "Fear: " + str(currentFear) + "%"
 
-#Amount must be integer
 func reducePopulation(amount):
     population -= amount
-    
-    var amountLeft = amount
-    var i = 0
-    #var villagers = get_tree().get_nodes_in_group("Villagers")
-    while(amountLeft > 0 && !localVillagers.empty()):
-        var v = localVillagers.pop_front()
-        i += 1
-        #if(v.homeVillage == self):
-        v.queue_free()
-        amountLeft -= 1
-    
     if(population < 0):
         population = 0
+    if(floor(population) < prevPopulation):
+        var count = prevPopulation - floor(population)
+        while(count > 0 && !localVillagers.empty()):
+            var v = localVillagers.pop_front()
+            v.queue_free()
+            count -= 1
+    
+#    var amountLeft = amount
+#    var i = 0
+#    #var villagers = get_tree().get_nodes_in_group("Villagers")
+#    while(amountLeft > 0 && !localVillagers.empty()):
+#        var v = localVillagers.pop_front()
+#        i += 1
+#        #if(v.homeVillage == self):
+#        v.queue_free()
+#        amountLeft -= 1
     prevPopulation = floor(population)
     populationLabel.text = "Population: " + str(population)
     lifebar.value = population
@@ -130,23 +135,32 @@ func increasePopulation(amount):
         lifebar.max_value = population
     lifebar.value = population
 
-#func attackVillage():
-#    var amount = population * DEATH_RATE
-#    reducePopulation(round(amount))
-#    increaseFear(maxFear * FEAR_GROWTH_ON_ATTACK)
-#    isBeingTargeted = false
+func runCombatStep():
+    print("Combat step!")
+    var soldiersDeathAmount = localVillagers.size() / VILLAGERS_PER_SOLDIER_DEATH
+    var villagersDeathAmount = attackingSoldiers.size() / SOLDIERS_PER_VILLAGER_DEATH
+    print("Villagers death: " + str(villagersDeathAmount))
+    print("Soldiers death: " + str(soldiersDeathAmount))
+    reducePopulation(villagersDeathAmount)
+    if(floor(population) <= 0):
+        population = 0 #Killed too many villagers, village is now empty
+        sendRemainingSoldiersToCastle()
+    #reduceSoldiers(soldierDeathAmount)
+    #TODO what if 0 soldiers left
 
 func addSoldier(soldierObj):
     if(currentState == PEACE_STATE):
         currentState = WAR_STATE
+        find_node("CombatTimer").start()
         find_node("FearGrowthTimer").start()
     attackingSoldiers.append(soldierObj)
     print("Num soldiers attacking: " + str(attackingSoldiers.size()))
-    if(currentFear >= 50):
+    if(currentFear >= 50 || localVillagers.empty()):
         sendRemainingSoldiersToCastle()
 
 func sendRemainingSoldiersToCastle():
     find_node("FearGrowthTimer").stop()
+    find_node("CombatTimer").stop()
     currentState = PEACE_STATE
     var count = attackingSoldiers.size()
     #var i = 0
@@ -174,34 +188,19 @@ func _on_FearGrowthTimer_timeout():
     if(currentState == WAR_STATE):
         increaseFear(maxFear * FEAR_GROWTH_WHILE_AT_WAR)
         if(currentFear >= 50):
-            sendRemainingSoldiersToCastle()
-#            currentState = PEACE_STATE
-#            var count = attackingSoldiers.size()
-#            while(!attackingSoldiers.empty()):
-#                var soldier = attackingSoldiers.pop_front()
-#                increaseFear(FEAR_GROWTH_PER_REMAINING_SOLDIER * maxFear)
-#                if(soldier != null && !soldier.movingBackToCastle):
-#                    soldier.sendToCastle()
-#            var i = 0
-#            var localVillagers = get_tree().get_nodes_in_group("Villagers")
-#            while(count > 0 && population >= 1 && i < localVillagers.size()):
-#                var v = localVillagers[i]
-#                i += 1
-#                if(v.homeVillage == self):
-#                    sendVillagerToCastle(v)
-#                    count -= 1           
+            sendRemainingSoldiersToCastle()          
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
-        if(!isBeingTargeted): #TODO check if necessary
-            #isBeingTargeted = true
-            var successfulAttack = castle.sendSoldiersTo(self)
-            #TODO immediate for now
-#            if(successfulAttack):
-#                attackVillage()
+#        if(!isBeingTargeted): #TODO check if necessary
+#            #isBeingTargeted = true
+        var successfulAttack = castle.sendSoldiersTo(self)
 
 func _on_TravelTimer_timeout():
     var amount = floor(population * TRAVELING_VILLAGERS_PERCENT)
     if(amount > 0):
         for i in range(amount):
             addTravelingVillager()
+
+func _on_CombatTimer_timeout():
+    runCombatStep()

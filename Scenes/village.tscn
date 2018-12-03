@@ -182,7 +182,14 @@ wait_time = 8.0
 one_shot = false
 autostart = true
 
-[node name="ClickArea" type="Area2D" parent="." index="8"]
+[node name="CombatTimer" type="Timer" parent="." index="8"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = false
+autostart = false
+
+[node name="ClickArea" type="Area2D" parent="." index="9"]
 
 input_pickable = true
 gravity_vec = Vector2( 0, 1 )
@@ -201,6 +208,8 @@ shape = SubResource( 3 )
 [connection signal="timeout" from="FearGrowthTimer" to="." method="_on_FearGrowthTimer_timeout"]
 
 [connection signal="timeout" from="TravelTimer" to="." method="_on_TravelTimer_timeout"]
+
+[connection signal="timeout" from="CombatTimer" to="." method="_on_CombatTimer_timeout"]
 
 [connection signal="input_event" from="ClickArea" to="." method="_on_ClickArea_input_event"]
 
