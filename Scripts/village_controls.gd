@@ -68,6 +68,7 @@ func _ready():
         find_node("GrowthTimer").stop()
         find_node("FearGrowthTimer").stop()
         find_node("TravelTimer").stop()
+        find_node("WhiteFlag").hide()
         lifebar.hide()
 
 func _process(delta):

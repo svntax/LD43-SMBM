@@ -81,6 +81,7 @@ _sections_unfolded = [ "Offset", "Transform", "Z Index" ]
 
 [node name="DebugUI" type="Node2D" parent="." index="1"]
 
+visible = false
 z_index = 1000
 z_as_relative = false
 _sections_unfolded = [ "Z Index" ]

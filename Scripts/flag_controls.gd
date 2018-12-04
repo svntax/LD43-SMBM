@@ -15,14 +15,18 @@ func _ready():
 
 func updatePos(currentVal, maxVal):
     if(isWhiteFlag):
-        if(currentVal < 50):
+#        if(currentVal < 50):
+#            self.hide()
+#        else:
+            #self.show()
+        var percent = currentVal / maxVal
+        if(percent <= 0):
             self.hide()
         else:
             self.show()
-            var percent = (currentVal - 50) / 50
-            var totalDist = targetPos.y - startingPos.y
-            var dist = totalDist * percent
-            self.global_position = startingPos + Vector2(0, dist)
+        var totalDist = targetPos.y - startingPos.y
+        var dist = totalDist * percent
+        self.global_position = startingPos + Vector2(0, dist)
     else:
         var percent = currentVal / maxVal
         if(percent > 1):
