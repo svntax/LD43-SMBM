@@ -1,6 +1,7 @@
 extends Node
 
 var mainTheme
+var endingTheme
 var clickSound
 var clashSound01
 var clashSound02
@@ -14,6 +15,7 @@ var clashSoundsPlaying = false
 
 func _ready():
     mainTheme = find_node("MainTheme")
+    endingTheme = find_node("EndingTheme")
     clickSound = find_node("ClickSound")
     clashSound01 = find_node("ClashSound01")
     clashSound02 = find_node("ClashSound02")

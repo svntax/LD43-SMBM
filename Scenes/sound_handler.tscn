@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Scripts/sound_controls.gd" type="Script" id=1]
 [ext_resource path="res://Audio/sac2.ogg" type="AudioStream" id=2]
@@ -9,8 +9,9 @@
 [ext_resource path="res://Audio/clash04.wav" type="AudioStream" id=7]
 [ext_resource path="res://Audio/clash05.wav" type="AudioStream" id=8]
 [ext_resource path="res://Audio/noo.wav" type="AudioStream" id=9]
+[ext_resource path="res://Audio/sacrifice_ludum.ogg" type="AudioStream" id=10]
 
-[node name="Node" type="Node"]
+[node name="Node" type="Node" index="0"]
 
 script = ExtResource( 1 )
 
@@ -88,6 +89,15 @@ autostart = false
 
 stream = ExtResource( 9 )
 volume_db = -8.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Master"
+
+[node name="EndingTheme" type="AudioStreamPlayer" parent="." index="9"]
+
+stream = ExtResource( 10 )
+volume_db = 0.0
 pitch_scale = 1.0
 autoplay = false
 mix_target = 0

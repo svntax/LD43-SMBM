@@ -14,6 +14,8 @@ var finalSoldiersAmount
 var invadersCount
 var soldiersCount
 
+var canClick
+
 var invasionCombatStarted
 
 var invaderObject = load("res://Scenes/soldier.tscn")
@@ -30,6 +32,7 @@ func _ready():
     soldiersCount = 0
     finalSoldiersAmount = 0
     invasionCombatStarted = false
+    canClick = false
     
     if(self.name == "InvasionScene"):
         #Ugly fix, for some reason 1 extra defender is being spawned
@@ -41,7 +44,7 @@ func _ready():
             invasionSpawnPoints.append(point.global_position)
 
 func _process(delta):
-    if Globals.rebellionEnded:
+    if Globals.rebellionEnded || canClick:
         if Input.is_action_just_pressed("MOVE_TO_NEXT_FRAME"):
             SoundHandler.mainTheme.stop()
             get_tree().change_scene("res://Scenes/main_menu.tscn")
@@ -114,11 +117,9 @@ func invasionCombatStep():
     print("Invaders remaining: " + str(invaders.size()))
     for i in range(5):
         if(invaders.empty()):
-            print("Game win!")
             endInvasionCombat(true)
             return
         if(defendingSoldiers.empty()):
-            print("Game over!")
             endInvasionCombat(false)
             return
         var invader = invaders.pop_front()
@@ -148,9 +149,9 @@ func endInvasionCombat(success):
     Globals.invasionEnded = true
     find_node("InvasionCombatTimer").stop()
     if(success):
-        print("Game win!")
+        print("Game win")
     else:
-        print("Game over")
+        find_node("InvasionAnimationPlayer").play("battle_end_anim")
 
 func _on_InvasionSpawnTimer_timeout():
     if(invadersCount < invadersAmount):
@@ -160,3 +161,11 @@ func _on_InvasionSpawnTimer_timeout():
 
 func _on_InvasionCombatTimer_timeout():
     invasionCombatStep()
+
+func _on_InvasionAnimationPlayer_animation_finished(anim_name):
+    if(anim_name == "battle_end_anim"):
+        SoundHandler.mainTheme.stop()
+        find_node("InvasionAnimationPlayer").play("game_over_anim")
+    elif(anim_name == "game_over_anim"):
+        canClick = true
+        SoundHandler.nooSound.play()

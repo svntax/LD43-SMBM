@@ -6,7 +6,7 @@ var rebellionEnded = false
 var invasionEnded = false
 var soldiersAmountAtEnd = 0
 
-var INVADERS_AMOUNT = 20
+var INVADERS_AMOUNT = 22
 
 func _ready():
     print("Globals ready")
