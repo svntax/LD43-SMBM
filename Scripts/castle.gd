@@ -4,7 +4,7 @@ extends Node2D
 var GROWTH_RATE = 0.015
 
 #Number of soldiers at the start
-var INITIAL_POPULATION = 21.0
+var INITIAL_POPULATION = 40.0
 
 #The number of soldiers needed minimum to win
 var TARGET_SOLDIER_AMOUNT = Globals.INVADERS_AMOUNT

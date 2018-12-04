@@ -15,6 +15,7 @@ var invadersCount
 var soldiersCount
 
 var canClick
+var gameWin
 
 var invasionCombatStarted
 
@@ -33,6 +34,7 @@ func _ready():
     finalSoldiersAmount = 0
     invasionCombatStarted = false
     canClick = false
+    gameWin = false
     
     if(self.name == "InvasionScene"):
         #Ugly fix, for some reason 1 extra defender is being spawned
@@ -71,6 +73,8 @@ func _on_InvasionTimer_timeout():
         for village in villages:
             village.hideVillagers()
         Globals.soldiersAmountAtEnd = get_node("Castle").population
+        Globals.soldiersAmountAtEnd += get_tree().get_nodes_in_group("Soldiers").size()
+        print("Soldiers outside: " + str(get_tree().get_nodes_in_group("Soldiers").size()))
         #Animation
         get_node("UI").get_node("InvasionLabel").hide()
         get_node("UI").get_node("ArrivedLabel").show()
@@ -148,10 +152,8 @@ func endInvasionCombat(success):
     SoundHandler.stopClashSounds()
     Globals.invasionEnded = true
     find_node("InvasionCombatTimer").stop()
-    if(success):
-        print("Game win")
-    else:
-        find_node("InvasionAnimationPlayer").play("battle_end_anim")
+    gameWin = success
+    find_node("InvasionAnimationPlayer").play("battle_end_anim")
 
 func _on_InvasionSpawnTimer_timeout():
     if(invadersCount < invadersAmount):
@@ -165,7 +167,10 @@ func _on_InvasionCombatTimer_timeout():
 func _on_InvasionAnimationPlayer_animation_finished(anim_name):
     if(anim_name == "battle_end_anim"):
         SoundHandler.mainTheme.stop()
-        find_node("InvasionAnimationPlayer").play("game_over_anim")
+        if(gameWin):
+            get_tree().change_scene("res://Scenes/game_win_scene.tscn")
+        else:
+            find_node("InvasionAnimationPlayer").play("game_over_anim")
     elif(anim_name == "game_over_anim"):
         canClick = true
         SoundHandler.nooSound.play()

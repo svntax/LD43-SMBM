@@ -9,7 +9,7 @@ var FEAR_DECREASE_WHILE_AT_PEACE = 0.018
 
 #Number of villagers at start
 var INITIAL_POPULATION = 10
-var INITIAL_FEAR = 40
+var INITIAL_FEAR = 45
 
 #Must be decimal numbers
 var SOLDIERS_PER_VILLAGER_DEATH = 5.0
@@ -83,7 +83,6 @@ func addVillager():
 
 func addTravelingVillager():
     var villager = villagerObject.instance()
-    #get_node("YSort").add_child(villager)
     add_child(villager)
     villager.translate(Vector2(0, 16))
     villager.updateOriginalPos()

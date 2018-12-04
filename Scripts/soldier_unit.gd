@@ -62,7 +62,7 @@ func makeInvader():
 
 func invadeCastle(target):
     invadingCastle = true
-    moveSpeed = FRANTIC_SPEED
+    moveSpeed = FRANTIC_SPEED + 8
     find_node("FranticWanderTimer").stop()
     moveUnitTo(target)
 
@@ -106,7 +106,6 @@ func _physics_process(delta):
             if(!Globals.invasionEnded):
                 if(get_parent().name == "InvasionScene"):
                     get_parent().startInvasionCombat()
-
                 updateOriginalPos()
             return
         if(firstMove):
