@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://Scripts/soldier_unit.gd" type="Script" id=1]
 [ext_resource path="res://Sprites/knight_spritesheet.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/auto_y_sort.gd" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://Sprites/invading_knight_spritesheet.png" type="Texture" id=4]
+[ext_resource path="res://icon.png" type="Texture" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 
@@ -23,6 +24,18 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ 0, 1 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("InvaderSprite:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
 "times": PoolRealArray( 0, 0.2 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
@@ -52,15 +65,23 @@ hframes = 2
 script = ExtResource( 3 )
 _sections_unfolded = [ "Animation", "Transform" ]
 
-[node name="DebugSprite" type="Sprite" parent="." index="2"]
+[node name="InvaderSprite" type="Sprite" parent="." index="2"]
+
+visible = false
+texture = ExtResource( 4 )
+hframes = 2
+script = ExtResource( 3 )
+_sections_unfolded = [ "Animation" ]
+
+[node name="DebugSprite" type="Sprite" parent="." index="3"]
 
 visible = false
 position = Vector2( 0, -10 )
 scale = Vector2( 0.1, 0.1 )
-texture = ExtResource( 4 )
+texture = ExtResource( 5 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3"]
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="4"]
 
 root_node = NodePath("..")
 autoplay = "bobbing_anim"
@@ -70,14 +91,14 @@ playback_speed = 1.0
 anims/bobbing_anim = SubResource( 2 )
 blend_times = [  ]
 
-[node name="FranticWanderTimer" type="Timer" parent="." index="4"]
+[node name="FranticWanderTimer" type="Timer" parent="." index="5"]
 
 process_mode = 1
 wait_time = 0.2
 one_shot = false
 autostart = false
 
-[node name="DefendWanderTimer" type="Timer" parent="." index="5"]
+[node name="DefendWanderTimer" type="Timer" parent="." index="6"]
 
 process_mode = 1
 wait_time = 0.4

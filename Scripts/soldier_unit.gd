@@ -17,10 +17,14 @@ var movingBackToCastle
 var movingToCastleDoor
 var runningAway
 var defendingCastle
+var invadingCastle
+var invaderAtCastle
 
 var targetVillage
 var castle
 var franticPosOrigin
+
+var isInvader
 
 var wanderTimer
 
@@ -29,12 +33,15 @@ func _ready():
     spawnPos = Vector2()
     reachedNextPos = true
     targetVillage = null
+    isInvader = false
     firstMove = true
     movingToTargetVillage = false
     movingBackToCastle = false
     movingToCastleDoor = false
     runningAway = false
     defendingCastle = false
+    invadingCastle = false
+    invaderAtCastle = false
     
     moveVel = Vector2()
     nextPos = Vector2()
@@ -47,6 +54,17 @@ func _ready():
 
 func updateOriginalPos():
     originalPos = self.global_position
+
+func makeInvader():
+    isInvader = true
+    find_node("Sprite").hide()
+    find_node("InvaderSprite").show()
+
+func invadeCastle(target):
+    invadingCastle = true
+    moveSpeed = FRANTIC_SPEED
+    find_node("FranticWanderTimer").stop()
+    moveUnitTo(target)
 
 func sendToCastle():
     movingBackToCastle = true
@@ -77,9 +95,19 @@ func _physics_process(delta):
     if(self.global_position.distance_to(nextPos) < 2):
         moveVel = Vector2()
         reachedNextPos = true
-        if(defendingCastle):
-            reachedNextPos = false
-            moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))
+        if(defendingCastle || invaderAtCastle):
+            if(!Globals.invasionEnded):
+                reachedNextPos = false
+                moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))
+            return
+        if(invadingCastle):
+            invadingCastle = false
+            invaderAtCastle = true
+            if(!Globals.invasionEnded):
+                if(get_parent().name == "InvasionScene"):
+                    get_parent().startInvasionCombat()
+
+                updateOriginalPos()
             return
         if(firstMove):
             reachedNextPos = false
@@ -117,4 +145,5 @@ func _on_FranticWanderTimer_timeout():
         moveUnitTo(franticPosOrigin + Vector2(rand_range(-8, 8), rand_range(-8, 8)))
 
 func _on_DefendWanderTimer_timeout():
-    moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))
+    if(!Globals.invasionEnded):
+        moveUnitTo(originalPos + Vector2(rand_range(-12, 12), rand_range(-12, 12)))

@@ -51,7 +51,7 @@ tracks/1/keys = {
 "values": [  ]
 }
 
-[node name="InvasionScene" type="Node2D"]
+[node name="InvasionScene" type="Node2D" index="0"]
 
 script = ExtResource( 1 )
 
@@ -255,7 +255,7 @@ autostart = true
 [node name="InvasionCombatTimer" type="Timer" parent="." index="12"]
 
 process_mode = 1
-wait_time = 0.2
+wait_time = 1.5
 one_shot = false
 autostart = false
 

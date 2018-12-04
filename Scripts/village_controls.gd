@@ -299,7 +299,7 @@ func _on_FearGrowthTimer_timeout():
 #            sendRemainingSoldiersToCastle()
 
 func _on_ClickArea_input_event(viewport, event, shape_idx):
-    if Globals.rebellionStarted || get_parent().name == "InvasionScene":
+    if Globals.rebellionStarted || Globals.invasionArrived || get_parent().name == "InvasionScene":
         return
     if(event is InputEventMouseButton && event.pressed && event.button_index == BUTTON_LEFT):
         var successfulAttack = castle.sendSoldiersTo(self)
